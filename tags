@@ -1,0 +1,329 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ARRAY_ID	header.h	/^    ARRAY_ID, \/\/ID_NODE->child = dim$/;"	e	enum:IDENTIFIER_KIND
+ARRAY_SIZE_NEGATIVE	semanticAnalysis.c	/^    ARRAY_SIZE_NEGATIVE,$/;"	e	enum:ErrorMsgKind	file:
+ARRAY_SIZE_NOT_INT	semanticAnalysis.c	/^    ARRAY_SIZE_NOT_INT,$/;"	e	enum:ErrorMsgKind	file:
+ARRAY_SUBSCRIPT_NOT_INT	semanticAnalysis.c	/^    ARRAY_SUBSCRIPT_NOT_INT,$/;"	e	enum:ErrorMsgKind	file:
+ARRAY_TYPE_DESCRIPTOR	symbolTable.h	/^    ARRAY_TYPE_DESCRIPTOR,$/;"	e	enum:TypeDescriptorKind
+ASSIGN_STMT	header.h	/^    ASSIGN_STMT, \/\/TODO:for simpler implementation, assign_expr also uses this$/;"	e	enum:STMT_KIND
+AST_NODE	header.h	/^struct AST_NODE {$/;"	s
+AST_NODE	header.h	/^typedef struct AST_NODE AST_NODE;$/;"	t	typeref:struct:AST_NODE
+AST_TYPE	header.h	/^typedef enum AST_TYPE$/;"	g
+AST_TYPE	header.h	/^} AST_TYPE;$/;"	t	typeref:enum:AST_TYPE
+AST_TYPE_string	functions.c	/^char *AST_TYPE_string[] = {"PROGRAM", "GLOBAL_DECL_LIST", "GLOBAL_DECL", "DECL_LIST", "FUNCTION_DECL", "PARAM_LIST", "PARAM", "DIM_FN", "DIMFN1", "EXPR_NULL", "BLOCK", "DECL", "TYPE_DECL", "VAR_DECL",$/;"	v
+Allocate	alloc.c	/^AST_NODE *Allocate(AST_TYPE type){$/;"	f
+ArrayProperties	symbolTable.h	/^typedef struct ArrayProperties$/;"	s
+ArrayProperties	symbolTable.h	/^} ArrayProperties;$/;"	t	typeref:struct:ArrayProperties
+BINARY_OPERATION	header.h	/^    BINARY_OPERATION,$/;"	e	enum:EXPR_KIND
+BINARY_OPERATOR	header.h	/^typedef enum BINARY_OPERATOR$/;"	g
+BINARY_OPERATOR	header.h	/^} BINARY_OPERATOR;$/;"	t	typeref:enum:BINARY_OPERATOR
+BINARY_OP_ADD	header.h	/^    BINARY_OP_ADD,$/;"	e	enum:BINARY_OPERATOR
+BINARY_OP_AND	header.h	/^    BINARY_OP_AND,$/;"	e	enum:BINARY_OPERATOR
+BINARY_OP_DIV	header.h	/^    BINARY_OP_DIV,$/;"	e	enum:BINARY_OPERATOR
+BINARY_OP_EQ	header.h	/^    BINARY_OP_EQ,$/;"	e	enum:BINARY_OPERATOR
+BINARY_OP_GE	header.h	/^    BINARY_OP_GE,$/;"	e	enum:BINARY_OPERATOR
+BINARY_OP_GT	header.h	/^    BINARY_OP_GT,$/;"	e	enum:BINARY_OPERATOR
+BINARY_OP_LE	header.h	/^    BINARY_OP_LE,$/;"	e	enum:BINARY_OPERATOR
+BINARY_OP_LT	header.h	/^    BINARY_OP_LT,$/;"	e	enum:BINARY_OPERATOR
+BINARY_OP_MUL	header.h	/^    BINARY_OP_MUL,$/;"	e	enum:BINARY_OPERATOR
+BINARY_OP_NE	header.h	/^    BINARY_OP_NE,$/;"	e	enum:BINARY_OPERATOR
+BINARY_OP_OR	header.h	/^    BINARY_OP_OR$/;"	e	enum:BINARY_OPERATOR
+BINARY_OP_SUB	header.h	/^    BINARY_OP_SUB,$/;"	e	enum:BINARY_OPERATOR
+BLOCK_NODE	header.h	/^    BLOCK_NODE,$/;"	e	enum:AST_TYPE
+CC	Makefile	/^CC = gcc -g$/;"	m
+CONST_STRING_TYPE	header.h	/^    CONST_STRING_TYPE,\/\/for "const string"$/;"	e	enum:DATA_TYPE
+CONST_VALUE_NODE	header.h	/^    CONST_VALUE_NODE, \/\/ex:1, 2, "constant string"$/;"	e	enum:AST_TYPE
+CON_Type	header.h	/^typedef struct CON_Type{$/;"	s
+CON_Type	header.h	/^} CON_Type;$/;"	t	typeref:struct:CON_Type
+C_type	header.h	/^typedef enum C_type {INTEGERC,FLOATC,STRINGC} C_type;$/;"	g
+C_type	header.h	/^typedef enum C_type {INTEGERC,FLOATC,STRINGC} C_type;$/;"	t	typeref:enum:C_type
+DATA_TYPE	header.h	/^typedef enum DATA_TYPE$/;"	g
+DATA_TYPE	header.h	/^} DATA_TYPE;$/;"	t	typeref:enum:DATA_TYPE
+DECLARATION_NODE	header.h	/^    DECLARATION_NODE,$/;"	e	enum:AST_TYPE
+DECLSemanticValue	header.h	/^typedef struct DECLSemanticValue$/;"	s
+DECLSemanticValue	header.h	/^} DECLSemanticValue;$/;"	t	typeref:struct:DECLSemanticValue
+DECL_KIND	header.h	/^typedef enum DECL_KIND$/;"	g
+DECL_KIND	header.h	/^} DECL_KIND;$/;"	t	typeref:enum:DECL_KIND
+ERROR_TYPE	header.h	/^    ERROR_TYPE$/;"	e	enum:DATA_TYPE
+EXCESSIVE_ARRAY_DIM_DECLARATION	semanticAnalysis.c	/^    EXCESSIVE_ARRAY_DIM_DECLARATION,$/;"	e	enum:ErrorMsgKind	file:
+EXPRSemanticValue	header.h	/^typedef struct EXPRSemanticValue$/;"	s
+EXPRSemanticValue	header.h	/^} EXPRSemanticValue;$/;"	t	typeref:struct:EXPRSemanticValue
+EXPR_KIND	header.h	/^typedef enum EXPR_KIND$/;"	g
+EXPR_KIND	header.h	/^} EXPR_KIND;$/;"	t	typeref:enum:EXPR_KIND
+EXPR_NODE	header.h	/^    EXPR_NODE,$/;"	e	enum:AST_TYPE
+ErrorMsgKind	semanticAnalysis.c	/^typedef enum ErrorMsgKind$/;"	g	file:
+ErrorMsgKind	semanticAnalysis.c	/^} ErrorMsgKind;$/;"	t	typeref:enum:ErrorMsgKind	file:
+FLOAT	pattern/assign.c	/^typedef float FLOAT;$/;"	t	file:
+FLOATA	pattern/assign.c	/^typedef float FLOATA[2];$/;"	t	file:
+FLOATC	header.h	/^typedef enum C_type {INTEGERC,FLOATC,STRINGC} C_type;$/;"	e	enum:C_type
+FLOAT_PTR_TYPE	header.h	/^    FLOAT_PTR_TYPE,\/\/for parameter passing$/;"	e	enum:DATA_TYPE
+FLOAT_TYPE	header.h	/^    FLOAT_TYPE,$/;"	e	enum:DATA_TYPE
+FOR_STMT	header.h	/^    FOR_STMT,$/;"	e	enum:STMT_KIND
+FUNCTION_CALL_STMT	header.h	/^    FUNCTION_CALL_STMT,$/;"	e	enum:STMT_KIND
+FUNCTION_DECL	header.h	/^    FUNCTION_DECL,$/;"	e	enum:DECL_KIND
+FUNCTION_PARAMETER_DECL	header.h	/^    FUNCTION_PARAMETER_DECL$/;"	e	enum:DECL_KIND
+FUNCTION_SIGNATURE	symbolTable.h	/^    FUNCTION_SIGNATURE$/;"	e	enum:SymbolAttributeKind
+FunctionSignature	symbolTable.h	/^typedef struct FunctionSignature$/;"	s
+FunctionSignature	symbolTable.h	/^} FunctionSignature;$/;"	t	typeref:struct:FunctionSignature
+HASH	symbolTable.c	/^int HASH(char * str) {$/;"	f
+HASH_TABLE_SIZE	symbolTable.h	13;"	d
+IDENTIFIER_KIND	header.h	/^typedef enum IDENTIFIER_KIND$/;"	g
+IDENTIFIER_KIND	header.h	/^} IDENTIFIER_KIND;$/;"	t	typeref:enum:IDENTIFIER_KIND
+IDENTIFIER_NODE	header.h	/^    IDENTIFIER_NODE,$/;"	e	enum:AST_TYPE
+IF_STMT	header.h	/^    IF_STMT,$/;"	e	enum:STMT_KIND
+INCOMPATIBLE_ARRAY_DIMENSION	semanticAnalysis.c	/^    INCOMPATIBLE_ARRAY_DIMENSION,$/;"	e	enum:ErrorMsgKind	file:
+INT	pattern/assign.c	/^typedef int INT;$/;"	t	file:
+INTA	pattern/assign.c	/^typedef int INTA[2];$/;"	t	file:
+INTEGERC	header.h	/^typedef enum C_type {INTEGERC,FLOATC,STRINGC} C_type;$/;"	e	enum:C_type
+INT_PTR_TYPE	header.h	/^    INT_PTR_TYPE,\/\/for parameter passing$/;"	e	enum:DATA_TYPE
+INT_TYPE	header.h	/^    INT_TYPE,$/;"	e	enum:DATA_TYPE
+IS_FUNCTION_NOT_VARIABLE	semanticAnalysis.c	/^    IS_FUNCTION_NOT_VARIABLE,$/;"	e	enum:ErrorMsgKind	file:
+IS_TYPE_NOT_VARIABLE	semanticAnalysis.c	/^    IS_TYPE_NOT_VARIABLE,$/;"	e	enum:ErrorMsgKind	file:
+IdentifierSemanticValue	header.h	/^typedef struct IdentifierSemanticValue$/;"	s
+IdentifierSemanticValue	header.h	/^} IdentifierSemanticValue;$/;"	t	typeref:struct:IdentifierSemanticValue
+LEX	Makefile	/^LEX = flex$/;"	m
+LIBS	Makefile	/^LIBS = -lfl $/;"	m
+MAX_ARRAY_DIMENSION	header.h	4;"	d
+NONEMPTY_ASSIGN_EXPR_LIST_NODE	header.h	/^    NONEMPTY_ASSIGN_EXPR_LIST_NODE,$/;"	e	enum:AST_TYPE
+NONEMPTY_RELOP_EXPR_LIST_NODE	header.h	/^    NONEMPTY_RELOP_EXPR_LIST_NODE$/;"	e	enum:AST_TYPE
+NONE_TYPE	header.h	/^    NONE_TYPE,\/\/for nodes like PROGRAM_NODE which has no type$/;"	e	enum:DATA_TYPE
+NORMAL_ID	header.h	/^    NORMAL_ID, \/\/function Name, uninitialized scalar variable$/;"	e	enum:IDENTIFIER_KIND
+NOT_ARRAY	semanticAnalysis.c	/^    NOT_ARRAY,$/;"	e	enum:ErrorMsgKind	file:
+NOT_ASSIGNABLE	semanticAnalysis.c	/^    NOT_ASSIGNABLE,$/;"	e	enum:ErrorMsgKind	file:
+NOT_FUNCTION_NAME	semanticAnalysis.c	/^    NOT_FUNCTION_NAME,$/;"	e	enum:ErrorMsgKind	file:
+NUL_NODE	header.h	/^    NUL_NODE,$/;"	e	enum:AST_TYPE
+OBJECT	Makefile	/^OBJECT = parser.tab.c parser.tab.o lex.yy.c alloc.o functions.o semanticAnalysis.o symbolTable.o$/;"	m
+OUTPUT	Makefile	/^OUTPUT = parser.output parser.tab.h$/;"	m
+PARAMETER_TYPE_UNMATCH	semanticAnalysis.c	/^    PARAMETER_TYPE_UNMATCH,$/;"	e	enum:ErrorMsgKind	file:
+PARAM_LIST_NODE	header.h	/^    PARAM_LIST_NODE,$/;"	e	enum:AST_TYPE
+PASS_ARRAY_TO_SCALAR	semanticAnalysis.c	/^    PASS_ARRAY_TO_SCALAR,$/;"	e	enum:ErrorMsgKind	file:
+PASS_SCALAR_TO_ARRAY	semanticAnalysis.c	/^    PASS_SCALAR_TO_ARRAY$/;"	e	enum:ErrorMsgKind	file:
+PROGRAM_NODE	header.h	/^    PROGRAM_NODE,$/;"	e	enum:AST_TYPE
+Parameter	symbolTable.h	/^typedef struct Parameter$/;"	s
+Parameter	symbolTable.h	/^} Parameter;$/;"	t	typeref:struct:Parameter
+RETURN_ARRAY	semanticAnalysis.c	/^    RETURN_ARRAY,$/;"	e	enum:ErrorMsgKind	file:
+RETURN_STMT	header.h	/^    RETURN_STMT,$/;"	e	enum:STMT_KIND
+RETURN_TYPE_UNMATCH	semanticAnalysis.c	/^    RETURN_TYPE_UNMATCH,$/;"	e	enum:ErrorMsgKind	file:
+SCALAR_TYPE_DESCRIPTOR	symbolTable.h	/^    SCALAR_TYPE_DESCRIPTOR,$/;"	e	enum:TypeDescriptorKind
+STMTSemanticValue	header.h	/^typedef struct STMTSemanticValue$/;"	s
+STMTSemanticValue	header.h	/^} STMTSemanticValue;$/;"	t	typeref:struct:STMTSemanticValue
+STMT_KIND	header.h	/^typedef enum STMT_KIND$/;"	g
+STMT_KIND	header.h	/^} STMT_KIND;$/;"	t	typeref:enum:STMT_KIND
+STMT_LIST_NODE	header.h	/^    STMT_LIST_NODE,$/;"	e	enum:AST_TYPE
+STMT_NODE	header.h	/^    STMT_NODE,$/;"	e	enum:AST_TYPE
+STRINGC	header.h	/^typedef enum C_type {INTEGERC,FLOATC,STRINGC} C_type;$/;"	e	enum:C_type
+STRING_OPERATION	semanticAnalysis.c	/^    STRING_OPERATION,$/;"	e	enum:ErrorMsgKind	file:
+SYMBOL_IS_NOT_TYPE	semanticAnalysis.c	/^    SYMBOL_IS_NOT_TYPE,$/;"	e	enum:ErrorMsgKind	file:
+SYMBOL_REDECLARE	semanticAnalysis.c	/^    SYMBOL_REDECLARE,$/;"	e	enum:ErrorMsgKind	file:
+SYMBOL_TABLE_FLOAT_NAME	symbolTable.h	9;"	d
+SYMBOL_TABLE_INT_NAME	symbolTable.h	8;"	d
+SYMBOL_TABLE_SYS_LIB_FREAD	symbolTable.h	12;"	d
+SYMBOL_TABLE_SYS_LIB_READ	symbolTable.h	11;"	d
+SYMBOL_TABLE_VOID_NAME	symbolTable.h	10;"	d
+SYMBOL_UNDECLARED	semanticAnalysis.c	/^    SYMBOL_UNDECLARED,$/;"	e	enum:ErrorMsgKind	file:
+SymbolAttribute	symbolTable.h	/^typedef struct SymbolAttribute$/;"	s
+SymbolAttribute	symbolTable.h	/^} SymbolAttribute;$/;"	t	typeref:struct:SymbolAttribute
+SymbolAttributeKind	symbolTable.h	/^typedef enum SymbolAttributeKind$/;"	g
+SymbolAttributeKind	symbolTable.h	/^} SymbolAttributeKind;$/;"	t	typeref:enum:SymbolAttributeKind
+SymbolTable	symbolTable.h	/^typedef struct SymbolTable$/;"	s
+SymbolTable	symbolTable.h	/^} SymbolTable;$/;"	t	typeref:struct:SymbolTable
+SymbolTableEntry	symbolTable.h	/^typedef struct SymbolTableEntry$/;"	s
+SymbolTableEntry	symbolTable.h	/^} SymbolTableEntry;$/;"	t	typeref:struct:SymbolTableEntry
+TARGET	Makefile	/^TARGET = parser$/;"	m
+TOO_FEW_ARGUMENTS	semanticAnalysis.c	/^    TOO_FEW_ARGUMENTS,$/;"	e	enum:ErrorMsgKind	file:
+TOO_MANY_ARGUMENTS	semanticAnalysis.c	/^    TOO_MANY_ARGUMENTS,$/;"	e	enum:ErrorMsgKind	file:
+TRY_TO_INIT_ARRAY	semanticAnalysis.c	/^    TRY_TO_INIT_ARRAY,$/;"	e	enum:ErrorMsgKind	file:
+TYPEDEF_VOID_ARRAY	semanticAnalysis.c	/^    TYPEDEF_VOID_ARRAY,$/;"	e	enum:ErrorMsgKind	file:
+TYPE_ATTRIBUTE	symbolTable.h	/^    TYPE_ATTRIBUTE,$/;"	e	enum:SymbolAttributeKind
+TYPE_DECL	header.h	/^    TYPE_DECL,$/;"	e	enum:DECL_KIND
+TypeDescriptor	symbolTable.h	/^typedef struct TypeDescriptor$/;"	s
+TypeDescriptor	symbolTable.h	/^} TypeDescriptor;$/;"	t	typeref:struct:TypeDescriptor
+TypeDescriptorKind	symbolTable.h	/^typedef enum TypeDescriptorKind$/;"	g
+TypeDescriptorKind	symbolTable.h	/^} TypeDescriptorKind;$/;"	t	typeref:enum:TypeDescriptorKind
+TypeSpecSemanticValue	header.h	/^typedef struct TypeSpecSemanticValue$/;"	s
+TypeSpecSemanticValue	header.h	/^} TypeSpecSemanticValue;$/;"	t	typeref:struct:TypeSpecSemanticValue
+UNARY_OPERATION	header.h	/^    UNARY_OPERATION$/;"	e	enum:EXPR_KIND
+UNARY_OPERATOR	header.h	/^typedef enum UNARY_OPERATOR$/;"	g
+UNARY_OPERATOR	header.h	/^} UNARY_OPERATOR;$/;"	t	typeref:enum:UNARY_OPERATOR
+UNARY_OP_LOGICAL_NEGATION	header.h	/^    UNARY_OP_LOGICAL_NEGATION$/;"	e	enum:UNARY_OPERATOR
+UNARY_OP_NEGATIVE	header.h	/^    UNARY_OP_NEGATIVE,$/;"	e	enum:UNARY_OPERATOR
+UNARY_OP_POSITIVE	header.h	/^    UNARY_OP_POSITIVE,$/;"	e	enum:UNARY_OPERATOR
+VARIABLE_ATTRIBUTE	symbolTable.h	/^    VARIABLE_ATTRIBUTE,$/;"	e	enum:SymbolAttributeKind
+VARIABLE_DECL	header.h	/^    VARIABLE_DECL,$/;"	e	enum:DECL_KIND
+VARIABLE_DECL_LIST_NODE	header.h	/^    VARIABLE_DECL_LIST_NODE,$/;"	e	enum:AST_TYPE
+VOID_TYPE	header.h	/^    VOID_TYPE,$/;"	e	enum:DATA_TYPE
+VOID_VARIABLE	semanticAnalysis.c	/^    VOID_VARIABLE,$/;"	e	enum:ErrorMsgKind	file:
+WHILE_STMT	header.h	/^    WHILE_STMT,$/;"	e	enum:STMT_KIND
+WITH_INIT_ID	header.h	/^    WITH_INIT_ID, \/\/ID_NODE->child = initial value$/;"	e	enum:IDENTIFIER_KIND
+YACC	Makefile	/^YACC = bison -v$/;"	m
+YACCFLAG	Makefile	/^YACCFLAG = -d$/;"	m
+__HEADER_H__	header.h	2;"	d
+__SYMBOL_TABLE_H__	symbolTable.h	2;"	d
+add_op	parser.y	/^add_op		: OP_PLUS$/;"	l
+arrayProperties	symbolTable.h	/^        ArrayProperties arrayProperties;\/\/kind: ARRAY_TYPE_DESCRIPTOR$/;"	m	union:TypeDescriptor::__anon5
+assign_expr	parser.y	/^assign_expr     : ID OP_ASSIGN relop_expr$/;"	l
+assign_expr_list	parser.y	/^assign_expr_list : nonempty_assign_expr_list$/;"	l
+attr	symbolTable.h	/^    } attr;$/;"	m	struct:SymbolAttribute	typeref:union:SymbolAttribute::__anon6
+attribute	symbolTable.h	/^    SymbolAttribute* attribute;$/;"	m	struct:SymbolTableEntry
+attributeKind	symbolTable.h	/^    SymbolAttributeKind attributeKind;$/;"	m	struct:SymbolAttribute
+binaryOp	header.h	/^        BINARY_OPERATOR binaryOp;$/;"	m	union:EXPRSemanticValue::__anon2
+block	parser.y	/^block           : decl_list stmt_list$/;"	l
+cexpr	parser.y	/^cexpr		: cexpr OP_PLUS mcexpr$/;"	l
+cfactor	parser.y	/^cfactor:	CONST$/;"	l
+checkAssignOrExpr	semanticAnalysis.c	/^void checkAssignOrExpr(AST_NODE* assignOrExprRelatedNode)$/;"	f
+checkAssignmentStmt	semanticAnalysis.c	/^void checkAssignmentStmt(AST_NODE* assignmentNode)$/;"	f
+checkForStmt	semanticAnalysis.c	/^void checkForStmt(AST_NODE* forNode)$/;"	f
+checkFunctionCall	semanticAnalysis.c	/^void checkFunctionCall(AST_NODE* functionCallNode)$/;"	f
+checkIfStmt	semanticAnalysis.c	/^void checkIfStmt(AST_NODE* ifNode)$/;"	f
+checkParameterPassing	semanticAnalysis.c	/^void checkParameterPassing(Parameter* formalParameter, AST_NODE* actualParameter)$/;"	f
+checkReturnStmt	semanticAnalysis.c	/^void checkReturnStmt(AST_NODE* returnNode)$/;"	f
+checkWhileStmt	semanticAnalysis.c	/^void checkWhileStmt(AST_NODE* whileNode)$/;"	f
+checkWriteFunction	semanticAnalysis.c	/^void checkWriteFunction(AST_NODE* functionCallNode)$/;"	f
+child	header.h	/^	struct AST_NODE *child;$/;"	m	struct:AST_NODE	typeref:struct:AST_NODE::AST_NODE
+closeScope	symbolTable.c	/^void closeScope()$/;"	f
+const1	header.h	/^		CON_Type *const1;$/;"	m	union:AST_NODE::__anon4
+constEvalValue	header.h	/^    } constEvalValue;$/;"	m	struct:EXPRSemanticValue	typeref:union:EXPRSemanticValue::__anon1
+const_type	header.h	/^        C_type  const_type;$/;"	m	struct:CON_Type
+const_u	header.h	/^		const_u;$/;"	m	struct:CON_Type	typeref:union:CON_Type::__anon3
+currentLevel	symbolTable.h	/^    int currentLevel;$/;"	m	struct:SymbolTable
+dataType	header.h	/^    DATA_TYPE dataType;$/;"	m	struct:AST_NODE
+dataType	symbolTable.h	/^        DATA_TYPE dataType;\/\/kind: SCALAR_TYPE_DESCRIPTOR$/;"	m	union:TypeDescriptor::__anon5
+decl	parser.y	/^decl		: type_decl$/;"	l
+declSemanticValue	header.h	/^        DECLSemanticValue declSemanticValue;$/;"	m	union:AST_NODE::__anon4
+decl_list	parser.y	/^decl_list	: decl_list decl$/;"	l
+declareFunction	semanticAnalysis.c	/^void declareFunction(AST_NODE* declarationNode)$/;"	f
+declareIdList	semanticAnalysis.c	/^void declareIdList(AST_NODE* declarationNode, SymbolAttributeKind isVariableOrTypeAttribute, int ignoreArrayFirstDimSize)$/;"	f
+declaredLocally	symbolTable.c	/^int declaredLocally(char* symbolName)$/;"	f
+dim_decl	parser.y	/^dim_decl	: MK_LB cexpr MK_RB$/;"	l
+dim_fn	parser.y	/^dim_fn		: MK_LB expr_null MK_RB$/;"	l
+dim_list	parser.y	/^dim_list	: dim_list MK_LB expr MK_RB$/;"	l
+dimension	symbolTable.h	/^    int dimension;$/;"	m	struct:ArrayProperties
+elementType	symbolTable.h	/^    DATA_TYPE elementType;$/;"	m	struct:ArrayProperties
+enterIntoHashTrain	symbolTable.c	/^void enterIntoHashTrain(int hashIndex, SymbolTableEntry* entry)$/;"	f
+enterSymbol	symbolTable.c	/^SymbolTableEntry* enterSymbol(char* symbolName, SymbolAttribute* attribute)$/;"	f
+evaluateExprValue	semanticAnalysis.c	/^void evaluateExprValue(AST_NODE* exprNode)$/;"	f
+expr	parser.y	/^expr		: expr add_op term$/;"	l
+exprSemanticValue	header.h	/^        EXPRSemanticValue exprSemanticValue;$/;"	m	union:AST_NODE::__anon4
+expr_null	parser.y	/^expr_null	:expr$/;"	l
+fValue	header.h	/^        float fValue;$/;"	m	union:EXPRSemanticValue::__anon1
+factor	parser.y	/^factor		: MK_LPAREN relop_expr MK_RPAREN$/;"	l
+functionSignature	symbolTable.h	/^        FunctionSignature* functionSignature;$/;"	m	union:SymbolAttribute::__anon6
+function_decl	parser.y	/^function_decl	: function_head MK_LPAREN opt_param_list MK_RPAREN MK_LBRACE block MK_RBRACE$/;"	l
+function_head	parser.y	/^function_head   : type ID$/;"	l
+fval	header.h	/^		double  fval;$/;"	m	union:CON_Type::__anon3
+g1	pattern/assign.c	/^int g1;$/;"	v
+g10	pattern/assign.c	/^FLOATA g10;$/;"	v
+g2	pattern/assign.c	/^float g2;$/;"	v
+g3	pattern/assign.c	/^INT g3;$/;"	v
+g4	pattern/assign.c	/^FLOAT g4;$/;"	v
+g5	pattern/assign.c	/^int g5[2];$/;"	v
+g6	pattern/assign.c	/^float g6[2];$/;"	v
+g7	pattern/assign.c	/^INT g7[2];$/;"	v
+g8	pattern/assign.c	/^FLOAT g8[2];$/;"	v
+g9	pattern/assign.c	/^INTA g9;$/;"	v
+g_anyErrorOccur	semanticAnalysis.c	/^int g_anyErrorOccur = 0;$/;"	v
+getBiggerType	semanticAnalysis.c	/^DATA_TYPE getBiggerType(DATA_TYPE dataType1, DATA_TYPE dataType2)$/;"	f
+getExprOrConstValue	semanticAnalysis.c	/^void getExprOrConstValue(AST_NODE* exprOrConstNode, int* iValue, float* fValue)$/;"	f
+global_decl	parser.y	/^global_decl	: decl_list function_decl$/;"	l
+global_decl_list	parser.y	/^global_decl_list: global_decl_list global_decl$/;"	l
+hashTable	symbolTable.h	/^    SymbolTableEntry* hashTable[HASH_TABLE_SIZE];$/;"	m	struct:SymbolTable
+iValue	header.h	/^        int iValue;$/;"	m	union:EXPRSemanticValue::__anon1
+id_list	parser.y	/^id_list		: ID$/;"	l
+identifierName	header.h	/^    char *identifierName;$/;"	m	struct:IdentifierSemanticValue
+identifierSemanticValue	header.h	/^        IdentifierSemanticValue identifierSemanticValue;$/;"	m	union:AST_NODE::__anon4
+init_id	parser.y	/^init_id		: ID$/;"	l
+init_id_list	parser.y	/^init_id_list	: init_id$/;"	l
+initializeSymbolTable	symbolTable.c	/^void initializeSymbolTable()$/;"	f
+intval	header.h	/^		int     intval;$/;"	m	union:CON_Type::__anon3
+isConstEval	header.h	/^    int isConstEval;$/;"	m	struct:EXPRSemanticValue
+k	pattern/func.c	/^int k;$/;"	v
+kind	header.h	/^    DECL_KIND kind;$/;"	m	struct:DECLSemanticValue
+kind	header.h	/^    EXPR_KIND kind;$/;"	m	struct:EXPRSemanticValue
+kind	header.h	/^    IDENTIFIER_KIND kind;$/;"	m	struct:IdentifierSemanticValue
+kind	header.h	/^    STMT_KIND kind;$/;"	m	struct:STMTSemanticValue
+kind	symbolTable.h	/^    TypeDescriptorKind kind;$/;"	m	struct:TypeDescriptor
+leftmostSibling	header.h	/^	struct AST_NODE *leftmostSibling;$/;"	m	struct:AST_NODE	typeref:struct:AST_NODE::AST_NODE
+linenumber	header.h	/^	int linenumber;$/;"	m	struct:AST_NODE
+main	pattern/assign.c	/^int main() {$/;"	f
+main	pattern/control.c	/^int main() {$/;"	f
+main	pattern/expr.c	/^int main() {$/;"	f
+main	pattern/func.c	/^int main() {$/;"	f
+main	pattern/io.c	/^int main() {$/;"	f
+mcexpr	parser.y	/^mcexpr		: mcexpr OP_TIMES cfactor$/;"	l
+mul_op	parser.y	/^mul_op		: OP_TIMES$/;"	l
+name	symbolTable.h	/^    char* name;$/;"	m	struct:SymbolTableEntry
+nestingLevel	symbolTable.h	/^    int nestingLevel;$/;"	m	struct:SymbolTableEntry
+newSymbolTableEntry	symbolTable.c	/^SymbolTableEntry* newSymbolTableEntry(int nestingLevel)$/;"	f
+next	symbolTable.h	/^    struct Parameter* next;$/;"	m	struct:Parameter	typeref:struct:Parameter::Parameter
+nextInHashChain	symbolTable.h	/^    struct SymbolTableEntry* nextInHashChain;$/;"	m	struct:SymbolTableEntry	typeref:struct:SymbolTableEntry::SymbolTableEntry
+nextInSameLevel	symbolTable.h	/^    struct SymbolTableEntry* nextInSameLevel;$/;"	m	struct:SymbolTableEntry	typeref:struct:SymbolTableEntry::SymbolTableEntry
+nodeType	header.h	/^	AST_TYPE nodeType;$/;"	m	struct:AST_NODE
+nonempty_assign_expr_list	parser.y	/^nonempty_assign_expr_list        : nonempty_assign_expr_list MK_COMMA assign_expr$/;"	l
+nonempty_relop_expr_list	parser.y	/^nonempty_relop_expr_list	: nonempty_relop_expr_list MK_COMMA relop_expr$/;"	l
+op	header.h	/^    } op;$/;"	m	struct:EXPRSemanticValue	typeref:union:EXPRSemanticValue::__anon2
+openScope	symbolTable.c	/^void openScope()$/;"	f
+opt_param_list	parser.y	/^opt_param_list  : param_list$/;"	l
+param	parser.y	/^param		: type ID$/;"	l
+param_list	parser.y	/^param_list	: param_list MK_COMMA  param$/;"	l
+parameterList	symbolTable.h	/^    Parameter* parameterList;$/;"	m	struct:FunctionSignature
+parameterName	symbolTable.h	/^    char* parameterName;$/;"	m	struct:Parameter
+parametersCount	symbolTable.h	/^    int parametersCount;$/;"	m	struct:FunctionSignature
+parent	header.h	/^	struct AST_NODE *parent;$/;"	m	struct:AST_NODE	typeref:struct:AST_NODE::AST_NODE
+prevInHashChain	symbolTable.h	/^    struct SymbolTableEntry* prevInHashChain;$/;"	m	struct:SymbolTableEntry	typeref:struct:SymbolTableEntry::SymbolTableEntry
+printErrorMsg	semanticAnalysis.c	/^void printErrorMsg(AST_NODE* node, ErrorMsgKind errorMsgKind)$/;"	f
+printErrorMsgSpecial	semanticAnalysis.c	/^void printErrorMsgSpecial(AST_NODE* node1, char* name2, ErrorMsgKind errorMsgKind)$/;"	f
+printGV	functions.c	/^void printGV(AST_NODE *root, char* fileName)$/;"	f
+printGVNode	functions.c	/^int printGVNode(FILE *fp, AST_NODE* node, int count)$/;"	f
+printLabelString	functions.c	/^char *printLabelString(FILE *fp, AST_NODE *astNode)$/;"	f
+processBlockNode	semanticAnalysis.c	/^void processBlockNode(AST_NODE* blockNode)$/;"	f
+processConstValueNode	semanticAnalysis.c	/^void processConstValueNode(AST_NODE* constValueNode)$/;"	f
+processDeclDimList	semanticAnalysis.c	/^void processDeclDimList(AST_NODE* idNode, TypeDescriptor* typeDescriptor, int ignoreFirstDimSize)$/;"	f
+processDeclarationNode	semanticAnalysis.c	/^void processDeclarationNode(AST_NODE* declarationNode)$/;"	f
+processExprNode	semanticAnalysis.c	/^void processExprNode(AST_NODE* exprNode)$/;"	f
+processExprRelatedNode	semanticAnalysis.c	/^void processExprRelatedNode(AST_NODE* exprRelatedNode)$/;"	f
+processGeneralNode	semanticAnalysis.c	/^void processGeneralNode(AST_NODE *node)$/;"	f
+processProgramNode	semanticAnalysis.c	/^void processProgramNode(AST_NODE *programNode)$/;"	f
+processStmtNode	semanticAnalysis.c	/^void processStmtNode(AST_NODE* stmtNode)$/;"	f
+processTypeNode	semanticAnalysis.c	/^void processTypeNode(AST_NODE* idNodeAsType)$/;"	f
+processVariableLValue	semanticAnalysis.c	/^void processVariableLValue(AST_NODE* idNode)$/;"	f
+processVariableRValue	semanticAnalysis.c	/^void processVariableRValue(AST_NODE* idNode)$/;"	f
+program	parser.y	/^program		: global_decl_list { $$=Allocate(PROGRAM_NODE);  makeChild($$,$1); prog=$$;}$/;"	l
+properties	symbolTable.h	/^    } properties;$/;"	m	struct:TypeDescriptor	typeref:union:TypeDescriptor::__anon5
+rel_op	parser.y	/^rel_op		: OP_EQ$/;"	l
+relop_expr	parser.y	/^relop_expr	: relop_term$/;"	l
+relop_expr_list	parser.y	/^relop_expr_list	: nonempty_relop_expr_list$/;"	l
+relop_factor	parser.y	/^relop_factor	: expr$/;"	l
+relop_term	parser.y	/^relop_term	: relop_factor$/;"	l
+removeFromHashTrain	symbolTable.c	/^void removeFromHashTrain(int hashIndex, SymbolTableEntry* entry)$/;"	f
+removeSymbol	symbolTable.c	/^void removeSymbol(char* symbolName)$/;"	f
+retrieveSymbol	symbolTable.c	/^SymbolTableEntry* retrieveSymbol(char* symbolName)$/;"	f
+returnType	symbolTable.h	/^    DATA_TYPE returnType;$/;"	m	struct:FunctionSignature
+rightSibling	header.h	/^	struct AST_NODE *rightSibling;$/;"	m	struct:AST_NODE	typeref:struct:AST_NODE::AST_NODE
+sameNameInOuterLevel	symbolTable.h	/^    struct SymbolTableEntry* sameNameInOuterLevel;$/;"	m	struct:SymbolTableEntry	typeref:struct:SymbolTableEntry::SymbolTableEntry
+sc	header.h	/^		char    *sc; }$/;"	m	union:CON_Type::__anon3
+scopeDisplay	symbolTable.h	/^    SymbolTableEntry** scopeDisplay;$/;"	m	struct:SymbolTable
+scopeDisplayElementCount	symbolTable.h	/^    int scopeDisplayElementCount;$/;"	m	struct:SymbolTable
+semanticAnalysis	semanticAnalysis.c	/^void semanticAnalysis(AST_NODE *root)$/;"	f
+semantic_value	header.h	/^	} semantic_value;$/;"	m	struct:AST_NODE	typeref:union:AST_NODE::__anon4
+sizeInEachDimension	symbolTable.h	/^    int sizeInEachDimension[MAX_ARRAY_DIMENSION];$/;"	m	struct:ArrayProperties
+stmt	parser.y	/^stmt		: MK_LBRACE block MK_RBRACE$/;"	l
+stmtSemanticValue	header.h	/^        STMTSemanticValue stmtSemanticValue;$/;"	m	union:AST_NODE::__anon4
+stmt_list	parser.y	/^stmt_list	: stmt_list stmt$/;"	l
+symbolTable	symbolTable.c	/^SymbolTable symbolTable;$/;"	v
+symbolTableEnd	symbolTable.c	/^void symbolTableEnd()$/;"	f
+symbolTableEntry	header.h	/^    struct SymbolTableEntry *symbolTableEntry;$/;"	m	struct:IdentifierSemanticValue	typeref:struct:IdentifierSemanticValue::SymbolTableEntry
+term	parser.y	/^term		: term mul_op factor$/;"	l
+test	parser.y	/^test		: assign_expr$/;"	l
+try	pattern/func.c	/^void try() {$/;"	f
+type	parser.y	/^type		: INT$/;"	l
+type	symbolTable.h	/^    TypeDescriptor* type;$/;"	m	struct:Parameter
+typeDescriptor	symbolTable.h	/^        TypeDescriptor* typeDescriptor;$/;"	m	union:SymbolAttribute::__anon6
+typeName	header.h	/^    char *typeName;$/;"	m	struct:TypeSpecSemanticValue
+type_decl	parser.y	/^type_decl 	: TYPEDEF type id_list MK_SEMICOLON$/;"	l
+unaryOp	header.h	/^        UNARY_OPERATOR unaryOp;$/;"	m	union:EXPRSemanticValue::__anon2
+var_decl	parser.y	/^var_decl	: type init_id_list MK_SEMICOLON$/;"	l
+var_ref	parser.y	/^var_ref		: ID$/;"	l
