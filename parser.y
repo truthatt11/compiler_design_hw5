@@ -9,7 +9,7 @@
 #include "symbolTable.h"
 int linenumber = 1;
 AST_NODE *prog;
-FILE* asm_code;
+FILE* fout;
 
 extern int g_anyErrorOccur;
 
@@ -761,7 +761,7 @@ char *argv[];
   {
      yyin = fopen(argv[1],"r");
      yyparse();
-     // printGV(prog, NULL);
+      printGV(prog, NULL);
 
      initializeSymbolTable();
 
@@ -769,11 +769,10 @@ char *argv[];
 
      symbolTableEnd();
      if (!g_anyErrorOccur) {
-        asm_code = fopen("output.s", "w");
-        printf("Parsing completed. No errors found.\n");
+        fout = fopen("output.s", "w");
+        printf("Parsing completed. No errors found. Start code generation...\n");
         codegen(prog);
-        fclose(asm_code);
-        asm_code = NULL;
+        fclose(fout);
      }
   } /* main */
 

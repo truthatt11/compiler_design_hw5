@@ -149,16 +149,18 @@ SymbolTableEntry* enterSymbol(char* symbolName, SymbolAttribute* attribute)
     newEntry->name = symbolName;
 
     if(attribute->attributeKind == VARIABLE_ATTRIBUTE) {
-        newEntry->offset = ARoffset;
-        if(attribute->attr.typeDescriptor->kind == SCALAR_TYPE_DESCRIPTOR) {
-            ARoffset -= 4;
-        }else {
-            int i, size = 4;
-            ArrayProperties temp = attribute->attr.typeDescriptor->properties.arrayProperties;
-            for(i=0; i<temp.dimension; i++)
-                size *= temp.sizeInEachDimension[i];
-            ARoffset -= size;
+        if(symbolTable.currentLevel != 0) {
+            if(attribute->attr.typeDescriptor->kind == SCALAR_TYPE_DESCRIPTOR) {
+                ARoffset -= 4;
+            }else {
+                int i, size = 4;
+                ArrayProperties temp = attribute->attr.typeDescriptor->properties.arrayProperties;
+                for(i=0; i<temp.dimension; i++)
+                    size *= temp.sizeInEachDimension[i];
+                ARoffset -= size;
+            }
         }
+        newEntry->offset = ARoffset;
     }
 
     while(hashChain)
@@ -279,6 +281,7 @@ int declaredLocally(char* symbolName)
 void openScope()
 {
     ++symbolTable.currentLevel;
+    ARoffset = 0;
     if(symbolTable.currentLevel == symbolTable.scopeDisplayElementCount)
     {
         SymbolTableEntry** oldScopeDisplay = symbolTable.scopeDisplay;
