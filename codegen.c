@@ -37,14 +37,15 @@ void gen_head(char*);
 void gen_epilogue(char*, int);
 int  get_reg(REGISTER_TYPE);
 int  get_offset(SymbolTableEntry*);
+void recycle(AST_NODE*);
 
 int ARoffset;
 int reg_number;
 int nest_num = 0;
 int global_first = 1;
 int constant_count = 0;
-int reg_stack_callee[8];
-int reg_stack_caller[10];
+int reg_stack_callee[11];
+int reg_stack_caller[7];
 int callee_top;
 int caller_top;
 
@@ -52,12 +53,10 @@ void codegen(AST_NODE* programNode) {
     AST_NODE *traverseDeclaration = programNode->child;
     /* initialize reg stack */
     int i;
-    for(i=0; i<8; i++) reg_stack_callee[i] = i+16;
-    callee_top = 8;
-    for(i=0; i<10; i++) reg_stack_caller[i] = i+8;
-    reg_stack_caller[8] = 24;
-    reg_stack_caller[9] = 25;
-    caller_top = 10;
+    for(i=0; i<11; i++) reg_stack_callee[i] = 29-i;
+    callee_top = 11;
+    for(i=0; i<7; i++) reg_stack_caller[i] = 15-i;
+    caller_top = 7;
 
     while(traverseDeclaration) {
         if(traverseDeclaration->nodeType == VARIABLE_DECL_LIST_NODE) {
@@ -212,10 +211,17 @@ void genIfStmt(AST_NODE* ifNode) {
     AST_NODE* ifBodyNode = boolExpression->rightSibling;
     AST_NODE* elsePartNode = ifBodyNode->rightSibling;
 
+    boolExpression->place = get_reg(CALLER);
     genAssignOrExpr(boolExpression);
     /* do boolexpr, and cmp beq? */
-    if(elsePartNode != NULL) { fprintf(fout, "cbz w%d, Lelse%d\n", boolExpression->place, nest_num); }
-    else{ fprintf(fout, "cbz w%d, Lexit%d\n", boolExpression->place, nest_num); }
+    if(elsePartNode != NULL) { fprintf(fout, "beq Lelse%d\n", nest_num); }
+    else{ fprintf(fout, "beq Lexit%d\n", nest_num); }
+
+    recycle(boolExpression);
+    /*
+    reg_stack_caller[caller_top++] = boolExpression->place;
+    boolExpression->place = 0;
+    */
 
     genStmtNode(ifBodyNode);
     if(elsePartNode != NULL) {
@@ -224,14 +230,31 @@ void genIfStmt(AST_NODE* ifNode) {
         genStmtNode(elsePartNode);
     }
     fprintf(fout, "Lexit%d:\n", nest_num);
-    nest_num--;
 }
 
-void genReturnStmt(AST_NODE* returnNode) {}
+void genReturnStmt(AST_NODE* returnNode) {
+    AST_NODE* parentNode = returnNode->parent;
+    char* func_name = NULL;
+    while(parentNode) {
+        if(parentNode->nodeType == DECLARATION_NODE) {
+            if(parentNode->semantic_value.declSemanticValue.kind == FUNCTION_DECL) {
+                func_name = parentNode->child->rightSibling->semantic_value.identifierSemanticValue.identifierName;
+                break;
+            }
+        }
+        parentNode = parentNode->parent;
+    }
+    if(returnNode->child->nodeType != NUL_NODE) {
+        genExprRelatedNode(returnNode->child);
+        if(returnNode->child->place != 0)
+            fprintf(fout, "mov w0, w%d\n", returnNode->child->place);
+        recycle(returnNode->child);
+    }
+    fprintf(fout, "b _end_%s\n", func_name);
+}
 
 void genAssignOrExpr(AST_NODE* assignOrExprRelatedNode)
 {
-    assignOrExprRelatedNode->place = get_reg(CALLER);
     if(assignOrExprRelatedNode->nodeType == STMT_NODE)
     {
         if(assignOrExprRelatedNode->semantic_value.stmtSemanticValue.kind == ASSIGN_STMT)
@@ -268,57 +291,59 @@ void genExprNode(AST_NODE* exprNode) {
             switch(exprNode->semantic_value.exprSemanticValue.op.binaryOp)
             {
                 case BINARY_OP_ADD:
-                    //exprNode->semantic_value.exprSemanticValue.constEvalValue.iValue = leftValue + rightValue;
                     fprintf(fout, "add w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
                     break;
                 case BINARY_OP_SUB:
-                    //exprNode->semantic_value.exprSemanticValue.constEvalValue.iValue = leftValue - rightValue;
                     fprintf(fout, "sub w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
                     break;
                 case BINARY_OP_MUL:
-                    //exprNode->semantic_value.exprSemanticValue.constEvalValue.iValue = leftValue * rightValue;
                     fprintf(fout, "mul w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
                     break;
                 case BINARY_OP_DIV:
-                    //exprNode->semantic_value.exprSemanticValue.constEvalValue.iValue = leftValue / rightValue;
                     fprintf(fout, "sdiv w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
                     break;
                 case BINARY_OP_EQ:
-                    //exprNode->semantic_value.exprSemanticValue.constEvalValue.iValue = leftValue == rightValue;
-                    fprintf(fout, "eq w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
+                    fprintf(fout, "cmp w%d, w%d\n", leftOp->place, rightOp->place);
+                    fprintf(fout, "cset w%d, eq\n", leftOp->place);
+                    fprintf(fout, "cmp w%d, #0\n", leftOp->place);
                     break;
                 case BINARY_OP_GE:
-                    //exprNode->semantic_value.exprSemanticValue.constEvalValue.iValue = leftValue >= rightValue;
-                    fprintf(fout, "ge w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
+                    fprintf(fout, "cmp w%d, w%d\n", leftOp->place, rightOp->place);
+                    fprintf(fout, "cset w%d, gt\n", leftOp->place);
+                    fprintf(fout, "cmp w%d, #0\n", leftOp->place);
                     break;
                 case BINARY_OP_LE:
-                    //exprNode->semantic_value.exprSemanticValue.constEvalValue.iValue = leftValue <= rightValue;
-                    fprintf(fout, "le w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
+                    fprintf(fout, "cmp w%d, w%d\n", leftOp->place, rightOp->place);
+                    fprintf(fout, "cset w%d, le\n", leftOp->place);
+                    fprintf(fout, "cmp w%d, #0\n", leftOp->place);
                     break;
                 case BINARY_OP_NE:
-                    //exprNode->semantic_value.exprSemanticValue.constEvalValue.iValue = leftValue != rightValue;
-                    fprintf(fout, "ne w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
+                    fprintf(fout, "cmp w%d, w%d\n", leftOp->place, rightOp->place);
+                    fprintf(fout, "cset w%d, ne\n", leftOp->place);
+                    fprintf(fout, "cmp w%d, #0\n", leftOp->place);
                     break;
                 case BINARY_OP_GT:
-                    //exprNode->semantic_value.exprSemanticValue.constEvalValue.iValue = leftValue > rightValue;
-                    fprintf(fout, "gt w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
+                    fprintf(fout, "cmp w%d, w%d\n", leftOp->place, rightOp->place);
+                    fprintf(fout, "cset w%d, gt\n", leftOp->place);
+                    fprintf(fout, "cmp w%d, #0\n", leftOp->place);
                     break;
                 case BINARY_OP_LT:
-                    //exprNode->semantic_value.exprSemanticValue.constEvalValue.iValue = leftValue < rightValue;
-                    fprintf(fout, "lt w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
+                    fprintf(fout, "cmp w%d, w%d\n", leftOp->place, rightOp->place);
+                    fprintf(fout, "cset w%d, lt\n", leftOp->place);
+                    fprintf(fout, "cmp w%d, #0\n", leftOp->place);
                     break;
                 case BINARY_OP_AND:
-                    //exprNode->semantic_value.exprSemanticValue.constEvalValue.iValue = leftValue && rightValue;
                     fprintf(fout, "and w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
                     break;
                 case BINARY_OP_OR:
-                    //exprNode->semantic_value.exprSemanticValue.constEvalValue.iValue = leftValue || rightValue;
                     fprintf(fout, "or w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
                     break;
                 default:
-                    printf("Unhandled case in void evaluateExprValue(AST_NODE* exprNode)\n");
                     break;
             }
+            /* recycle left, right reg */
+            recycle(leftOp);
+            recycle(rightOp);
 
             return;
         }
@@ -350,13 +375,20 @@ void genAssignmentStmt(AST_NODE* assignmentNode)
     SymbolTableEntry* entry = leftOp->semantic_value.identifierSemanticValue.symbolTableEntry;
 
     genVariableValue(leftOp);
+    rightOp->place = leftOp->place;
     genExprRelatedNode(rightOp);
-    //assignmentNode->dataType = getBiggerType(leftOp->dataType, rightOp->dataType);
-    fprintf(fout, "mov w%d, w%d\n", leftOp->place, rightOp->place);
-    fprintf(fout, "str w%d, [sp, #%d]\n", leftOp->place, entry->offset);
-    assignmentNode->place = rightOp->place;
-//    reg_stack_caller[caller_top++] = rightOp->place;
-    rightOp->place = 0;
+
+    if(leftOp->place != rightOp->place)
+        fprintf(fout, "mov w%d, w%d\n", leftOp->place, rightOp->place);
+    if(entry->nestingLevel > 0)
+        fprintf(fout, "str w%d, [x29, #%d]\n", leftOp->place, entry->offset);
+    else {
+        int temp = get_reg(CALLER);
+        fprintf(fout, "ldr x%d, =_g_%s\n", temp, entry->name);
+        fprintf(fout, "str w%d, [x%d, #0]\n", leftOp->place, temp);
+        reg_stack_caller[caller_top++] = temp;
+    }
+    recycle(leftOp);
 }
 
 void genVariableValue(AST_NODE* idNode)
@@ -367,9 +399,10 @@ void genVariableValue(AST_NODE* idNode)
     if(idNode->semantic_value.identifierSemanticValue.kind == NORMAL_ID)
     {
         /* global and local */
+        if(idNode->place == 0) idNode->place = get_reg(CALLEE);
+
         if(entry->nestingLevel != 0) {
-            if(idNode->place != 0) idNode->place = get_reg(CALLEE);
-            fprintf(fout, "ldr w%d, [sp, #%d]\n", idNode->place, entry->offset);
+            fprintf(fout, "ldr w%d, [x29, #%d]\n", idNode->place, entry->offset);
         } else {
             int temp = get_reg(CALLER);
             fprintf(fout, "ldr x%d, =_g_%s\n", temp, idNode->semantic_value.identifierSemanticValue.identifierName);
@@ -399,7 +432,7 @@ void genFunction(AST_NODE* declNode) {
     gen_head(funcName);
     gen_prologue(funcName);
     genBlockNode(blockNode);
-    gen_epilogue(funcName, /*size*/144 );
+    gen_epilogue(funcName, /*size*/92 );
 }
 
 void genBlockNode(AST_NODE* blockNode) {
@@ -413,7 +446,7 @@ void genBlockNode(AST_NODE* blockNode) {
 void genFunctionCall(AST_NODE* functionCallNode)
 {
     AST_NODE* functionIDNode = functionCallNode->child;
-    //if(functionCallNode->place == 0) functionCallNode->place = get_reg(CALLER);
+    if(functionCallNode->place == 0) functionCallNode->place = get_reg(CALLEE);
 
     //special case
     if(strcmp(functionIDNode->semantic_value.identifierSemanticValue.identifierName, "write") == 0)
@@ -439,8 +472,10 @@ void genFunctionCall(AST_NODE* functionCallNode)
     /* parameter */
     processGeneralNode(actualParameterList);
 
+    /* return */
     fprintf(fout, "bl %s\n", functionIDNode->semantic_value.identifierSemanticValue.identifierName);
-    /*TODO return? */
+    fprintf(fout, "mov w%d, w0\n", functionCallNode->place);
+
     AST_NODE* actualParameter = actualParameterList->child;
 
     functionCallNode->dataType;
@@ -451,23 +486,22 @@ void genWriteFunction(AST_NODE* functionCallNode)
     AST_NODE* functionIDNode = functionCallNode->child;
     AST_NODE* actualParameterList = functionIDNode->rightSibling;
     AST_NODE* actualParameter = actualParameterList->child;
-    SymbolTableEntry *entry = actualParameter->semantic_value.identifierSemanticValue.symbolTableEntry;
 
     switch(actualParameter->dataType) {
         case INT_TYPE:
-            fprintf(fout, "ldr w9, [x29, #%d]\n", entry->offset);
-            fprintf(fout, "mov w0, w9\n");
+            //fprintf(fout, "ldr w9, [x29, #%d]\n", entry->offset);
+            fprintf(fout, "mov w0, w%d\n", actualParameter->place);
             fprintf(fout, "bl _write_int\n");
             break;
         case FLOAT_TYPE:
-            fprintf(fout, "ldr w9, [x29, #%d]\n", entry->offset);
-            fprintf(fout, "mov w0, w9\n");
+            //fprintf(fout, "ldr w9, [x29, #%d]\n", entry->offset);
+            fprintf(fout, "mov w0, w%d\n", actualParameter->place);
             fprintf(fout, "bl _write_float\n");
             break;
         case CONST_STRING_TYPE:
             genConstValueNode(actualParameter);
-            fprintf(fout, "ldr x9, =_CONSTANT_%d\n", constant_count);
-            fprintf(fout, "mov x0, x9\n");
+            //fprintf(fout, "ldr x9, =_CONSTANT_%d\n", constant_count);
+            fprintf(fout, "mov x0, x%d\n", actualParameter->place);
             fprintf(fout, "bl _write_str\n");
             break;
         default:
@@ -475,10 +509,9 @@ void genWriteFunction(AST_NODE* functionCallNode)
     }
 }
 
-
 void genExprRelatedNode(AST_NODE* exprRelatedNode)
 {
-    exprRelatedNode->place = get_reg(CALLER);
+//    exprRelatedNode->place = get_reg(CALLER);
     switch(exprRelatedNode->nodeType)
     {
         case EXPR_NODE:
@@ -493,7 +526,6 @@ void genExprRelatedNode(AST_NODE* exprRelatedNode)
             break;
         case CONST_VALUE_NODE:
             genConstValueNode(exprRelatedNode);
-            fprintf(fout, "ldr w%d, _CONSTANT_%d\n", exprRelatedNode->place, constant_count);
             break;
         default:
             printf("Unhandle case in void processExprRelatedNode(AST_NODE* exprRelatedNode)\n");
@@ -505,6 +537,8 @@ void genExprRelatedNode(AST_NODE* exprRelatedNode)
 void genConstValueNode(AST_NODE* constValueNode)
 {
     constant_count++;
+    if(constValueNode->place == 0) constValueNode->place = get_reg(CALLEE);
+//    Must have been allocated?
     switch(constValueNode->semantic_value.const1->const_type)
     {
         case INTEGERC:
@@ -512,18 +546,21 @@ void genConstValueNode(AST_NODE* constValueNode)
             fprintf(fout, "_CONSTANT_%d: .word %d\n", constant_count
                     , constValueNode->semantic_value.const1->const_u.intval);
             fprintf(fout, ".align 3\n");
+            fprintf(fout, "ldr w%d, _CONSTANT_%d\n", constValueNode->place, constant_count);
             break;
         case FLOATC:
             fprintf(fout, ".data\n");
             fprintf(fout, "_CONSTANT_%d: .float %f\n", constant_count
                     , constValueNode->semantic_value.const1->const_u.fval);
             fprintf(fout, ".align 3\n");
+            fprintf(fout, "ldr w%d, _CONSTANT_%d\n", constValueNode->place, constant_count);
             break;
         case STRINGC:
             fprintf(fout, ".data\n");
             fprintf(fout, "_CONSTANT_%d: .ascii %s\n", constant_count
                     , constValueNode->semantic_value.const1->const_u.sc);
             fprintf(fout, ".align 3\n");
+            fprintf(fout, "ldr x%d, =_CONSTANT_%d\n", constValueNode->place, constant_count);
             break;
         default:
             printf("Unhandle case in void processConstValueNode(AST_NODE* constValueNode)\n");
@@ -534,6 +571,7 @@ void genConstValueNode(AST_NODE* constValueNode)
 
 
 void gen_prologue(char* name) {
+    int i;
     fprintf(fout, "str x30, [sp, #0]\n");
     fprintf(fout, "str x29, [sp, #-8]\n");
     fprintf(fout, "add x29, sp, #-8\n");
@@ -542,27 +580,13 @@ void gen_prologue(char* name) {
     fprintf(fout, "ldr x30, [x30, #0]\n");
     fprintf(fout, "sub sp, sp, w30\n");
     /* caller */
-    fprintf(fout, "str x8, [sp, #8]\n");
-    fprintf(fout, "str x9, [sp, #16]\n");
-    fprintf(fout, "str x10, [sp, #24]\n");
-    fprintf(fout, "str x11, [sp, #32]\n");
-    fprintf(fout, "str x12, [sp, #40]\n");
-    fprintf(fout, "str x13, [sp, #48]\n");
-    fprintf(fout, "str x14, [sp, #56]\n");
-    fprintf(fout, "str x15, [sp, #64]\n");
-    fprintf(fout, "str x24, [sp, #72]\n");
-    fprintf(fout, "str x25, [sp, #80]\n");
-    /* callee */
-    fprintf(fout, "str x16, [sp, #88]\n");
-    fprintf(fout, "str x17, [sp, #96]\n");
-    fprintf(fout, "str x18, [sp, #104]\n");
-    fprintf(fout, "str x19, [sp, #112]\n");
-    fprintf(fout, "str x20, [sp, #120]\n");
-    fprintf(fout, "str x21, [sp, #128]\n");
-    fprintf(fout, "str x22, [sp, #136]\n");
-    fprintf(fout, "str x23, [sp, #144]\n\n");
+    for(i=1; i<8; i++)
+        fprintf(fout, "str x%d, [sp, #%d]\n", i+8, i*8);
+    /* float register */
+    for(i=0; i<8; i++)
+        fprintf(fout, "str s%d, [sp, #%d]\n", i+16, i*4+64);
 
-    fprintf(fout, "_start_%s:\n", name);
+    fprintf(fout, "\n_start_%s:\n", name);
 }
 
 void gen_head(char* name) {
@@ -571,7 +595,12 @@ void gen_head(char* name) {
 }
 
 void gen_epilogue(char* name, int size) {
+    int i;
     fprintf(fout, "_end_%s:\n", name);
+    for(i=1; i<8; i++)
+        fprintf(fout, "ldr x%d, [sp, #%d]\n", i+8, i*8);
+    for(i=0; i<8; i++)
+        fprintf(fout, "ldr s%d, [sp, #%d]\n", i+16, i*4+64);
     fprintf(fout, "ldr x30, [x29, #8]\n");
     fprintf(fout, "add sp, x29, #8\n");
     fprintf(fout, "ldr x29, [x29, #0]\n");
@@ -595,6 +624,15 @@ int get_reg(REGISTER_TYPE type) {
         }
     }
     return -1;
+}
+
+void recycle(AST_NODE* node) {
+    if(node->place >= 9 && node->place <= 15)
+        reg_stack_caller[caller_top++] = node->place;
+    else if(node->place >= 19 && node->place <= 29)
+        reg_stack_callee[callee_top++] = node->place;
+    
+    node->place = 0;
 }
 
 int get_offset(SymbolTableEntry* node) {
