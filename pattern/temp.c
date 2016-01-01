@@ -1,6 +1,7 @@
 int n;
 int fact()
 {
+    int m;
     if (n == 1)
     { 
         return n;
@@ -9,7 +10,10 @@ int fact()
 
     { 
         n =n-1;
-        return (n*fact());
+        m = n*fact();
+        write(m);
+        write(n);
+        return (m);
     }
 }
 

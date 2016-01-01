@@ -29,7 +29,8 @@ void genVariableValue(AST_NODE*);
 
 typedef enum REGISTER_TYPE{
     CALLER,
-    CALLEE
+    CALLEE,
+    FLOAT
 } REGISTER_TYPE;
 
 void gen_prologue(char*);
@@ -44,19 +45,23 @@ int reg_number;
 int nest_num = 0;
 int global_first = 1;
 int constant_count = 0;
-int reg_stack_callee[11];
+int reg_stack_callee[10];
 int reg_stack_caller[7];
+int reg_stack_float[8];
 int callee_top;
 int caller_top;
+int float_top;
 
 void codegen(AST_NODE* programNode) {
     AST_NODE *traverseDeclaration = programNode->child;
     /* initialize reg stack */
     int i;
-    for(i=0; i<11; i++) reg_stack_callee[i] = 29-i;
-    callee_top = 11;
+    for(i=0; i<10; i++) reg_stack_callee[i] = 28-i;
+    callee_top = 10;
     for(i=0; i<7; i++) reg_stack_caller[i] = 15-i;
     caller_top = 7;
+    for(i=0; i<8; i++) reg_stack_float[i] = 23-i;
+    float_top = 8;
 
     while(traverseDeclaration) {
         if(traverseDeclaration->nodeType == VARIABLE_DECL_LIST_NODE) {
@@ -354,13 +359,27 @@ void genIdList(AST_NODE* declNode) {
     AST_NODE* idNode = declNode->child->rightSibling;
     while(idNode) {
         SymbolTableEntry* entry = idNode->semantic_value.identifierSemanticValue.symbolTableEntry;
+        TypeDescriptor* type = entry->attribute->attr.typeDescriptor;
+
         if(entry->nestingLevel == 0) {
             // global variable
             if(global_first) {
                 fprintf(fout, ".data\n");
                 global_first = 0;
             }
-            fprintf(fout, "_g_%s: .word 0\n", idNode->semantic_value.identifierSemanticValue.identifierName);
+            if(entry->attribute->attributeKind != VARIABLE_ATTRIBUTE) return;
+
+            if(type->kind == SCALAR_TYPE_DESCRIPTOR) {
+                if(type->properties.dataType == INT_TYPE)
+                    fprintf(fout, "_g_%s: .word 0\n", idNode->semantic_value.identifierSemanticValue.identifierName);
+                else if(type->properties.dataType == FLOAT_TYPE)
+                    fprintf(fout, "_g_%s: .float 0.0000\n", idNode->semantic_value.identifierSemanticValue.identifierName);
+            }else if(type->kind == ARRAY_TYPE_DESCRIPTOR) {
+                int size = 4, i;
+                for(i=0; i<type->properties.arrayProperties.dimension; i++)
+                    size *= type->properties.arrayProperties.sizeInEachDimension[i];
+                fprintf(fout, "_g_%s: .space %d\n", idNode->semantic_value.identifierSemanticValue.identifierName, size);
+            }
         }else {
             // local variable?
         }
@@ -375,20 +394,26 @@ void genAssignmentStmt(AST_NODE* assignmentNode)
     SymbolTableEntry* entry = leftOp->semantic_value.identifierSemanticValue.symbolTableEntry;
 
     genVariableValue(leftOp);
-    rightOp->place = leftOp->place;
+//    rightOp->place = leftOp->place;
+    if(rightOp->place == 0) rightOp->place = get_reg(CALLER);
     genExprRelatedNode(rightOp);
 
-    if(leftOp->place != rightOp->place)
-        fprintf(fout, "mov w%d, w%d\n", leftOp->place, rightOp->place);
-    if(entry->nestingLevel > 0)
+    if(entry->nestingLevel > 0) {
+        if(leftOp->place != rightOp->place)
+            fprintf(fout, "mov w%d, w%d\n", leftOp->place, rightOp->place);
         fprintf(fout, "str w%d, [x29, #%d]\n", leftOp->place, entry->offset);
-    else {
+    }else if(entry->attribute->attr.typeDescriptor->kind == SCALAR_TYPE_DESCRIPTOR) {
         int temp = get_reg(CALLER);
+        if(leftOp->place != rightOp->place)
+            fprintf(fout, "mov w%d, w%d\n", leftOp->place, rightOp->place);
         fprintf(fout, "ldr x%d, =_g_%s\n", temp, entry->name);
         fprintf(fout, "str w%d, [x%d, #0]\n", leftOp->place, temp);
         reg_stack_caller[caller_top++] = temp;
+    }else {
+        fprintf(fout, "str w%d, [x%d, #0]\n", rightOp->place, leftOp->place);
     }
     recycle(leftOp);
+    recycle(rightOp);
 }
 
 void genVariableValue(AST_NODE* idNode)
@@ -399,7 +424,7 @@ void genVariableValue(AST_NODE* idNode)
     if(idNode->semantic_value.identifierSemanticValue.kind == NORMAL_ID)
     {
         /* global and local */
-        if(idNode->place == 0) idNode->place = get_reg(CALLEE);
+        if(idNode->place == 0) idNode->place = get_reg(CALLER);
 
         if(entry->nestingLevel != 0) {
             fprintf(fout, "ldr w%d, [x29, #%d]\n", idNode->place, entry->offset);
@@ -414,12 +439,22 @@ void genVariableValue(AST_NODE* idNode)
     {
         int dimension = 0;
         AST_NODE *traverseDimList = idNode->child;
-        while(traverseDimList)
-        {
-            ++dimension;
-            processExprRelatedNode(traverseDimList);
-            traverseDimList = traverseDimList->rightSibling;
+
+        genExprRelatedNode(traverseDimList);
+        if(idNode->place == 0) {
+            int temp = get_reg(CALLER);
+            idNode->place = get_reg(CALLEE);
+            if(entry->nestingLevel == 0)
+                fprintf(fout, "ldr x%d, =_g_%s\n", idNode->place, idNode->semantic_value.identifierSemanticValue.identifierName);
+            else {
+                fprintf(fout, "ldr x%d, [x29, #%d]\n", idNode->place, entry->offset);
+            }
+            fprintf(fout, "ldr w%d, =4\n", temp);
+            fprintf(fout, "mul w%d, w%d, w%d\n", traverseDimList->place, traverseDimList->place, temp);
+            fprintf(fout, "add x%d, x%d, w%d, UXTW\n", idNode->place, idNode->place, traverseDimList->place);
+            reg_stack_caller[caller_top++] = temp;
         }
+        recycle(traverseDimList);
     }
 }
 
@@ -432,7 +467,7 @@ void genFunction(AST_NODE* declNode) {
     gen_head(funcName);
     gen_prologue(funcName);
     genBlockNode(blockNode);
-    gen_epilogue(funcName, /*size*/92 );
+    gen_epilogue(funcName, /*size*/172 );
 }
 
 void genBlockNode(AST_NODE* blockNode) {
@@ -452,18 +487,21 @@ void genFunctionCall(AST_NODE* functionCallNode)
     if(strcmp(functionIDNode->semantic_value.identifierSemanticValue.identifierName, "write") == 0)
     {
         genWriteFunction(functionCallNode);
+        recycle(functionCallNode);
         return;
     }
     if(strcmp(functionIDNode->semantic_value.identifierSemanticValue.identifierName, "read") == 0)
     {
         fprintf(fout, "bl _read_int\n");
         fprintf(fout, "mov w%d, w0\n", functionCallNode->place);
+        recycle(functionCallNode);
         return;
     }
     if(strcmp(functionIDNode->semantic_value.identifierSemanticValue.identifierName, "fread") == 0)
     {
         fprintf(fout, "bl _read_float\n");
         fprintf(fout, "mov w%d, w0\n", functionCallNode->place);
+        recycle(functionCallNode);
         return;
     }
     /* save registers TODO */
@@ -473,8 +511,9 @@ void genFunctionCall(AST_NODE* functionCallNode)
     processGeneralNode(actualParameterList);
 
     /* return */
-    fprintf(fout, "bl %s\n", functionIDNode->semantic_value.identifierSemanticValue.identifierName);
+    fprintf(fout, "bl _start_%s\n", functionIDNode->semantic_value.identifierSemanticValue.identifierName);
     fprintf(fout, "mov w%d, w0\n", functionCallNode->place);
+//    recycle(functionCallNode);
 
     AST_NODE* actualParameter = actualParameterList->child;
 
@@ -490,11 +529,19 @@ void genWriteFunction(AST_NODE* functionCallNode)
     switch(actualParameter->dataType) {
         case INT_TYPE:
             //fprintf(fout, "ldr w9, [x29, #%d]\n", entry->offset);
+            if(actualParameter != NULL) {
+                if(actualParameter->place == 0) actualParameter->place = get_reg(CALLER);
+                genExprRelatedNode(actualParameter);
+            }
             fprintf(fout, "mov w0, w%d\n", actualParameter->place);
             fprintf(fout, "bl _write_int\n");
             break;
         case FLOAT_TYPE:
             //fprintf(fout, "ldr w9, [x29, #%d]\n", entry->offset);
+            if(actualParameter != NULL) {
+                if(actualParameter->place == 0) actualParameter->place = get_reg(CALLER);
+                genExprRelatedNode(actualParameter);
+            }
             fprintf(fout, "mov w0, w%d\n", actualParameter->place);
             fprintf(fout, "bl _write_float\n");
             break;
@@ -507,6 +554,7 @@ void genWriteFunction(AST_NODE* functionCallNode)
         default:
             break;
     }
+    recycle(actualParameter);
 }
 
 void genExprRelatedNode(AST_NODE* exprRelatedNode)
@@ -536,9 +584,10 @@ void genExprRelatedNode(AST_NODE* exprRelatedNode)
 
 void genConstValueNode(AST_NODE* constValueNode)
 {
+    char* constString = malloc(1024);
     constant_count++;
     if(constValueNode->place == 0) constValueNode->place = get_reg(CALLEE);
-//    Must have been allocated?
+
     switch(constValueNode->semantic_value.const1->const_type)
     {
         case INTEGERC:
@@ -546,6 +595,7 @@ void genConstValueNode(AST_NODE* constValueNode)
             fprintf(fout, "_CONSTANT_%d: .word %d\n", constant_count
                     , constValueNode->semantic_value.const1->const_u.intval);
             fprintf(fout, ".align 3\n");
+            fprintf(fout, ".text\n");
             fprintf(fout, "ldr w%d, _CONSTANT_%d\n", constValueNode->place, constant_count);
             break;
         case FLOATC:
@@ -553,14 +603,18 @@ void genConstValueNode(AST_NODE* constValueNode)
             fprintf(fout, "_CONSTANT_%d: .float %f\n", constant_count
                     , constValueNode->semantic_value.const1->const_u.fval);
             fprintf(fout, ".align 3\n");
+            fprintf(fout, ".text\n");
             fprintf(fout, "ldr w%d, _CONSTANT_%d\n", constValueNode->place, constant_count);
             break;
         case STRINGC:
+            strncpy(constString, constValueNode->semantic_value.const1->const_u.sc+1,
+                    strlen(constValueNode->semantic_value.const1->const_u.sc)-2);
             fprintf(fout, ".data\n");
-            fprintf(fout, "_CONSTANT_%d: .ascii %s\n", constant_count
-                    , constValueNode->semantic_value.const1->const_u.sc);
+            fprintf(fout, "_CONSTANT_%d: .ascii \"%s\\000\"\n", constant_count, constString);
             fprintf(fout, ".align 3\n");
+            fprintf(fout, ".text\n");
             fprintf(fout, "ldr x%d, =_CONSTANT_%d\n", constValueNode->place, constant_count);
+            free(constString);
             break;
         default:
             printf("Unhandle case in void processConstValueNode(AST_NODE* constValueNode)\n");
@@ -582,16 +636,16 @@ void gen_prologue(char* name) {
     /* caller */
     for(i=1; i<8; i++)
         fprintf(fout, "str x%d, [sp, #%d]\n", i+8, i*8);
+    for(i=0; i<10; i++)
+        fprintf(fout, "str x%d, [sp, #%d]\n", i+19, i*8+64);
     /* float register */
     for(i=0; i<8; i++)
-        fprintf(fout, "str s%d, [sp, #%d]\n", i+16, i*4+64);
-
-    fprintf(fout, "\n_start_%s:\n", name);
+        fprintf(fout, "str s%d, [sp, #%d]\n", i+16, i*4+144);
 }
 
 void gen_head(char* name) {
     fprintf(fout, ".text\n");
-    fprintf(fout, "%s:\n", name);
+    fprintf(fout, "_start_%s:\n", name);
 }
 
 void gen_epilogue(char* name, int size) {
@@ -599,8 +653,10 @@ void gen_epilogue(char* name, int size) {
     fprintf(fout, "_end_%s:\n", name);
     for(i=1; i<8; i++)
         fprintf(fout, "ldr x%d, [sp, #%d]\n", i+8, i*8);
+    for(i=0; i<10; i++)
+        fprintf(fout, "ldr s%d, [sp, #%d]\n", i+19, i*8+64);
     for(i=0; i<8; i++)
-        fprintf(fout, "ldr s%d, [sp, #%d]\n", i+16, i*4+64);
+        fprintf(fout, "ldr s%d, [sp, #%d]\n", i+16, i*4+144);
     fprintf(fout, "ldr x30, [x29, #8]\n");
     fprintf(fout, "add sp, x29, #8\n");
     fprintf(fout, "ldr x29, [x29, #0]\n");
@@ -622,6 +678,12 @@ int get_reg(REGISTER_TYPE type) {
             callee_top--;
             return reg_stack_callee[callee_top];
         }
+    }else if(type == FLOAT) {
+        if(float_top == 0) printf("out of float register\n");
+        else{
+            float_top--;
+            return reg_stack_float[float_top];
+        }
     }
     return -1;
 }
@@ -629,8 +691,10 @@ int get_reg(REGISTER_TYPE type) {
 void recycle(AST_NODE* node) {
     if(node->place >= 9 && node->place <= 15)
         reg_stack_caller[caller_top++] = node->place;
-    else if(node->place >= 19 && node->place <= 29)
+    else if(node->place >= 19 && node->place <= 28)
         reg_stack_callee[callee_top++] = node->place;
+    else if(node->place >= 48 && node->place <= 55)
+        reg_stack_float[float_top++] = node->place-32;
     
     node->place = 0;
 }
