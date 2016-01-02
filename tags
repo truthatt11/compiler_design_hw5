@@ -36,7 +36,7 @@ BINARY_OP_NE	header.h	/^    BINARY_OP_NE,$/;"	e	enum:BINARY_OPERATOR
 BINARY_OP_OR	header.h	/^    BINARY_OP_OR$/;"	e	enum:BINARY_OPERATOR
 BINARY_OP_SUB	header.h	/^    BINARY_OP_SUB,$/;"	e	enum:BINARY_OPERATOR
 BLOCK_NODE	header.h	/^    BLOCK_NODE,$/;"	e	enum:AST_TYPE
-CALLEE	codegen.c	/^    CALLEE$/;"	e	enum:REGISTER_TYPE	file:
+CALLEE	codegen.c	/^    CALLEE,$/;"	e	enum:REGISTER_TYPE	file:
 CALLER	codegen.c	/^    CALLER,$/;"	e	enum:REGISTER_TYPE	file:
 CC	Makefile	/^CC = gcc -g$/;"	m
 CONST	parser.tab.c	/^    CONST = 259,$/;"	e	enum:yytokentype	file:
@@ -76,6 +76,7 @@ ErrorMsgKind	semanticAnalysis.c	/^} ErrorMsgKind;$/;"	t	typeref:enum:ErrorMsgKin
 FLEXINT_H	lex.yy.c	29;"	d	file:
 FLEX_BETA	lex.yy.c	13;"	d	file:
 FLEX_SCANNER	lex.yy.c	8;"	d	file:
+FLOAT	codegen.c	/^    FLOAT$/;"	e	enum:REGISTER_TYPE	file:
 FLOAT	parser.tab.c	/^    FLOAT = 262,$/;"	e	enum:yytokentype	file:
 FLOAT	parser.tab.h	/^    FLOAT = 262,$/;"	e	enum:yytokentype
 FLOAT	pattern/assign.c	/^typedef float FLOAT;$/;"	t	file:
@@ -123,9 +124,10 @@ IdentifierSemanticValue	header.h	/^typedef struct IdentifierSemanticValue$/;"	s
 IdentifierSemanticValue	header.h	/^} IdentifierSemanticValue;$/;"	t	typeref:struct:IdentifierSemanticValue
 LEX	Makefile	/^LEX = flex$/;"	m
 LIBS	Makefile	/^LIBS = -lfl $/;"	m
-Lelse1	output.s	/^Lelse1:$/;"	l
-Lexit1	output.s	/^Lexit1:$/;"	l
-MAIN	output.s	/^MAIN:$/;"	l
+MAIN	pattern/assign.c	/^int MAIN() {$/;"	f
+MAIN	pattern/control.c	/^int MAIN() {$/;"	f
+MAIN	pattern/expr.c	/^int MAIN() {$/;"	f
+MAIN	pattern/hello.c	/^int MAIN() {$/;"	f
 MAIN	pattern/temp.c	/^int MAIN()$/;"	f
 MAX_ARRAY_DIMENSION	header.h	4;"	d
 MK_COMMA	parser.tab.c	/^    MK_COMMA = 288,$/;"	e	enum:yytokentype	file:
@@ -405,28 +407,61 @@ YY_USE_CONST	lex.yy.c	93;"	d	file:
 YY_YY_PARSER_TAB_H_INCLUDED	parser.tab.c	194;"	d	file:
 YY_YY_PARSER_TAB_H_INCLUDED	parser.tab.h	34;"	d
 _CONSTANT_1	output.s	/^_CONSTANT_1: .word 1$/;"	l
-_CONSTANT_2	output.s	/^_CONSTANT_2: .word 1$/;"	l
-_CONSTANT_3	output.s	/^_CONSTANT_3: .ascii "Enter a number:"$/;"	l
-_CONSTANT_4	output.s	/^_CONSTANT_4: .word 1$/;"	l
-_CONSTANT_5	output.s	/^_CONSTANT_5: .word 1$/;"	l
-_CONSTANT_6	output.s	/^_CONSTANT_6: .word 1$/;"	l
-_CONSTANT_7	output.s	/^_CONSTANT_7: .ascii "The factorial is "$/;"	l
-_CONSTANT_8	output.s	/^_CONSTANT_8: .ascii "\\n"$/;"	l
+_CONSTANT_10	output.s	/^_CONSTANT_10: .word 4$/;"	l
+_CONSTANT_11	output.s	/^_CONSTANT_11: .word 5$/;"	l
+_CONSTANT_12	output.s	/^_CONSTANT_12: .ascii "\\n\\000"$/;"	l
+_CONSTANT_13	output.s	/^_CONSTANT_13: .ascii "\\n\\000"$/;"	l
+_CONSTANT_14	output.s	/^_CONSTANT_14: .float 1.000000$/;"	l
+_CONSTANT_15	output.s	/^_CONSTANT_15: .float 2.000000$/;"	l
+_CONSTANT_16	output.s	/^_CONSTANT_16: .float 3.000000$/;"	l
+_CONSTANT_17	output.s	/^_CONSTANT_17: .ascii "\\n\\000"$/;"	l
+_CONSTANT_18	output.s	/^_CONSTANT_18: .word 1$/;"	l
+_CONSTANT_19	output.s	/^_CONSTANT_19: .word 2$/;"	l
+_CONSTANT_2	output.s	/^_CONSTANT_2: .word 2$/;"	l
+_CONSTANT_20	output.s	/^_CONSTANT_20: .ascii "\\n\\000"$/;"	l
+_CONSTANT_21	output.s	/^_CONSTANT_21: .word 2$/;"	l
+_CONSTANT_22	output.s	/^_CONSTANT_22: .word 2$/;"	l
+_CONSTANT_23	output.s	/^_CONSTANT_23: .ascii "\\n\\000"$/;"	l
+_CONSTANT_24	output.s	/^_CONSTANT_24: .word 1$/;"	l
+_CONSTANT_25	output.s	/^_CONSTANT_25: .word 2$/;"	l
+_CONSTANT_26	output.s	/^_CONSTANT_26: .ascii "\\n\\000"$/;"	l
+_CONSTANT_27	output.s	/^_CONSTANT_27: .word 2$/;"	l
+_CONSTANT_28	output.s	/^_CONSTANT_28: .word 2$/;"	l
+_CONSTANT_29	output.s	/^_CONSTANT_29: .ascii "\\n\\000"$/;"	l
+_CONSTANT_3	output.s	/^_CONSTANT_3: .word 3$/;"	l
+_CONSTANT_30	output.s	/^_CONSTANT_30: .word 1$/;"	l
+_CONSTANT_31	output.s	/^_CONSTANT_31: .word 2$/;"	l
+_CONSTANT_32	output.s	/^_CONSTANT_32: .ascii "\\n\\000"$/;"	l
+_CONSTANT_33	output.s	/^_CONSTANT_33: .word 1$/;"	l
+_CONSTANT_34	output.s	/^_CONSTANT_34: .word 2$/;"	l
+_CONSTANT_35	output.s	/^_CONSTANT_35: .ascii "\\n\\000"$/;"	l
+_CONSTANT_36	output.s	/^_CONSTANT_36: .ascii "\\n\\000"$/;"	l
+_CONSTANT_37	output.s	/^_CONSTANT_37: .ascii "\\n\\000"$/;"	l
+_CONSTANT_38	output.s	/^_CONSTANT_38: .ascii "\\n\\000"$/;"	l
+_CONSTANT_39	output.s	/^_CONSTANT_39: .word 0$/;"	l
+_CONSTANT_4	output.s	/^_CONSTANT_4: .word 4$/;"	l
+_CONSTANT_5	output.s	/^_CONSTANT_5: .word 5$/;"	l
+_CONSTANT_6	output.s	/^_CONSTANT_6: .ascii "\\n\\000"$/;"	l
+_CONSTANT_7	output.s	/^_CONSTANT_7: .word 1$/;"	l
+_CONSTANT_8	output.s	/^_CONSTANT_8: .word 2$/;"	l
+_CONSTANT_9	output.s	/^_CONSTANT_9: .word 3$/;"	l
 _Noreturn	parser.tab.c	350;"	d	file:
 _Noreturn	parser.tab.c	352;"	d	file:
 __HEADER_H__	header.h	2;"	d
 __STDC_LIMIT_MACROS	lex.yy.c	39;"	d	file:
 __SYMBOL_TABLE_H__	symbolTable.h	2;"	d
 _end_MAIN	output.s	/^_end_MAIN:$/;"	l
-_end_fact	output.s	/^_end_fact:$/;"	l
-_frameSize_MAIN	output.s	/^_frameSize_MAIN: .word 92$/;"	l
-_frameSize_fact	output.s	/^_frameSize_fact: .word 92$/;"	l
-_g_n	output.s	/^_g_n: .word 0$/;"	l
+_frameSize_MAIN	output.s	/^_frameSize_MAIN: .word 172$/;"	l
+_read_float	main.S	/^_read_float:$/;"	l
+_read_int	main.S	/^_read_int:$/;"	l
 _start_MAIN	output.s	/^_start_MAIN:$/;"	l
-_start_fact	output.s	/^_start_fact:$/;"	l
+_write_float	main.S	/^_write_float:$/;"	l
+_write_int	main.S	/^_write_int:$/;"	l
+_write_str	main.S	/^_write_str:$/;"	l
 add	output.s	/^add sp, sp, #-16$/;"	l
 add	output.s	/^add sp, x29, #8$/;"	l
-add	output.s	/^add w22, w23, w24$/;"	l
+add	output.s	/^add w0, w19, w20$/;"	l
+add	output.s	/^add w10, w0, w0$/;"	l
 add	output.s	/^add x29, sp, #-8$/;"	l
 add_op	parser.y	/^add_op		: OP_PLUS$/;"	l
 alloca	parser.tab.c	397;"	d	file:
@@ -436,17 +471,14 @@ assign_expr_list	parser.y	/^assign_expr_list : nonempty_assign_expr_list$/;"	l
 attr	symbolTable.h	/^    } attr;$/;"	m	struct:SymbolAttribute	typeref:union:SymbolAttribute::__anon6
 attribute	symbolTable.h	/^    SymbolAttribute* attribute;$/;"	m	struct:SymbolTableEntry
 attributeKind	symbolTable.h	/^    SymbolAttributeKind attributeKind;$/;"	m	struct:SymbolAttribute
-b	output.s	/^b Lexit1$/;"	l
-b	output.s	/^b _end_fact$/;"	l
+b	output.s	/^b _end_MAIN$/;"	l
 binaryOp	header.h	/^        BINARY_OPERATOR binaryOp;$/;"	m	union:EXPRSemanticValue::__anon2
-bl	output.s	/^bl _read_int$/;"	l
+bl	output.s	/^bl _write_float$/;"	l
 bl	output.s	/^bl _write_int$/;"	l
 bl	output.s	/^bl _write_str$/;"	l
-bl	output.s	/^bl fact$/;"	l
 block	parser.y	/^block           : decl_list stmt_list$/;"	l
 callee_top	codegen.c	/^int callee_top;$/;"	v
 caller_top	codegen.c	/^int caller_top;$/;"	v
-cbz	output.s	/^cbz w9, Lelse1$/;"	l
 cexpr	parser.y	/^cexpr		: cexpr OP_PLUS mcexpr$/;"	l
 cfactor	parser.y	/^cfactor:	CONST$/;"	l
 checkAssignOrExpr	semanticAnalysis.c	/^void checkAssignOrExpr(AST_NODE* assignOrExprRelatedNode)$/;"	f
@@ -460,6 +492,10 @@ checkWhileStmt	semanticAnalysis.c	/^void checkWhileStmt(AST_NODE* whileNode)$/;"
 checkWriteFunction	semanticAnalysis.c	/^void checkWriteFunction(AST_NODE* functionCallNode)$/;"	f
 child	header.h	/^	struct AST_NODE *child;$/;"	m	struct:AST_NODE	typeref:struct:AST_NODE::AST_NODE
 closeScope	symbolTable.c	/^void closeScope()$/;"	f
+cmp	output.s	/^cmp w19, #0$/;"	l
+cmp	output.s	/^cmp w19, w20$/;"	l
+cmp	output.s	/^cmp w20, #0$/;"	l
+cmp	output.s	/^cmp w20, w19$/;"	l
 codegen	codegen.c	/^void codegen(AST_NODE* programNode) {$/;"	f
 const1	header.h	/^		CON_Type *const1;$/;"	m	union:AST_NODE::__anon4
 const1	parser.tab.c	/^	CON_Type  *const1;$/;"	m	union:YYSTYPE	file:
@@ -468,6 +504,12 @@ constEvalValue	header.h	/^    } constEvalValue;$/;"	m	struct:EXPRSemanticValue	t
 const_type	header.h	/^        C_type  const_type;$/;"	m	struct:CON_Type
 const_u	header.h	/^		const_u;$/;"	m	struct:CON_Type	typeref:union:CON_Type::__anon3
 constant_count	codegen.c	/^int constant_count = 0;$/;"	v
+cset	output.s	/^cset w19, gt$/;"	l
+cset	output.s	/^cset w19, lt$/;"	l
+cset	output.s	/^cset w19, ne$/;"	l
+cset	output.s	/^cset w20, eq$/;"	l
+cset	output.s	/^cset w20, gt$/;"	l
+cset	output.s	/^cset w20, le$/;"	l
 currentLevel	symbolTable.h	/^    int currentLevel;$/;"	m	struct:SymbolTable
 dataType	header.h	/^    DATA_TYPE dataType;$/;"	m	struct:AST_NODE
 dataType	symbolTable.h	/^        DATA_TYPE dataType;\/\/kind: SCALAR_TYPE_DESCRIPTOR$/;"	m	union:TypeDescriptor::__anon5
@@ -484,13 +526,11 @@ dimension	symbolTable.h	/^    int dimension;$/;"	m	struct:ArrayProperties
 elementType	symbolTable.h	/^    DATA_TYPE elementType;$/;"	m	struct:ArrayProperties
 enterIntoHashTrain	symbolTable.c	/^void enterIntoHashTrain(int hashIndex, SymbolTableEntry* entry)$/;"	f
 enterSymbol	symbolTable.c	/^SymbolTableEntry* enterSymbol(char* symbolName, SymbolAttribute* attribute)$/;"	f
-eq	output.s	/^eq w9, w19, w20$/;"	l
 evaluateExprValue	semanticAnalysis.c	/^void evaluateExprValue(AST_NODE* exprNode)$/;"	f
 expr	parser.y	/^expr		: expr add_op term$/;"	l
 exprSemanticValue	header.h	/^        EXPRSemanticValue exprSemanticValue;$/;"	m	union:AST_NODE::__anon4
 expr_null	parser.y	/^expr_null	:expr$/;"	l
 fValue	header.h	/^        float fValue;$/;"	m	union:EXPRSemanticValue::__anon1
-fact	output.s	/^fact:$/;"	l
 fact	pattern/temp.c	/^int fact()$/;"	f
 factor	parser.y	/^factor		: MK_LPAREN relop_expr MK_RPAREN$/;"	l
 flex_int16_t	lex.yy.c	/^typedef int16_t flex_int16_t;$/;"	t	file:
@@ -505,6 +545,10 @@ flex_uint32_t	lex.yy.c	/^typedef uint32_t flex_uint32_t;$/;"	t	file:
 flex_uint32_t	lex.yy.c	/^typedef unsigned int flex_uint32_t;$/;"	t	file:
 flex_uint8_t	lex.yy.c	/^typedef uint8_t flex_uint8_t;$/;"	t	file:
 flex_uint8_t	lex.yy.c	/^typedef unsigned char flex_uint8_t; $/;"	t	file:
+float_top	codegen.c	/^int float_top;$/;"	v
+fmov	output.s	/^fmov s0, s17$/;"	l
+fmov	output.s	/^fmov s16, s17$/;"	l
+fmov	output.s	/^fmov s17, s16$/;"	l
 fout	parser.tab.c	/^FILE* fout;$/;"	v
 functionSignature	symbolTable.h	/^        FunctionSignature* functionSignature;$/;"	m	union:SymbolAttribute::__anon6
 function_decl	parser.y	/^function_decl	: function_head MK_LPAREN opt_param_list MK_RPAREN MK_LBRACE block MK_RBRACE$/;"	l
@@ -549,7 +593,6 @@ get_reg	codegen.c	/^int get_reg(REGISTER_TYPE type) {$/;"	f
 global_decl	parser.y	/^global_decl	: decl_list function_decl$/;"	l
 global_decl_list	parser.y	/^global_decl_list: global_decl_list global_decl$/;"	l
 global_first	codegen.c	/^int global_first = 1;$/;"	v
-gt	output.s	/^gt w9, w24, w23$/;"	l
 hashTable	symbolTable.h	/^    SymbolTableEntry* hashTable[HASH_TABLE_SIZE];$/;"	m	struct:SymbolTable
 iValue	header.h	/^        int iValue;$/;"	m	union:EXPRSemanticValue::__anon1
 id_list	parser.y	/^id_list		: ID$/;"	l
@@ -566,54 +609,92 @@ kind	header.h	/^    EXPR_KIND kind;$/;"	m	struct:EXPRSemanticValue
 kind	header.h	/^    IDENTIFIER_KIND kind;$/;"	m	struct:IdentifierSemanticValue
 kind	header.h	/^    STMT_KIND kind;$/;"	m	struct:STMTSemanticValue
 kind	symbolTable.h	/^    TypeDescriptorKind kind;$/;"	m	struct:TypeDescriptor
-ldr	output.s	/^ldr s16, [sp, #64]$/;"	l
-ldr	output.s	/^ldr s17, [sp, #68]$/;"	l
-ldr	output.s	/^ldr s18, [sp, #72]$/;"	l
-ldr	output.s	/^ldr s19, [sp, #76]$/;"	l
-ldr	output.s	/^ldr s20, [sp, #80]$/;"	l
-ldr	output.s	/^ldr s21, [sp, #84]$/;"	l
+ldr	output.s	/^ldr s16, [sp, #144]$/;"	l
+ldr	output.s	/^ldr s16, [x29, #-20]$/;"	l
+ldr	output.s	/^ldr s16, [x29, #-24]$/;"	l
+ldr	output.s	/^ldr s16, _CONSTANT_14$/;"	l
+ldr	output.s	/^ldr s16, _CONSTANT_16$/;"	l
+ldr	output.s	/^ldr s17, [sp, #148]$/;"	l
+ldr	output.s	/^ldr s17, [x29, #-16]$/;"	l
+ldr	output.s	/^ldr s17, [x29, #-24]$/;"	l
+ldr	output.s	/^ldr s17, _CONSTANT_15$/;"	l
+ldr	output.s	/^ldr s18, [sp, #152]$/;"	l
+ldr	output.s	/^ldr s19, [sp, #156]$/;"	l
+ldr	output.s	/^ldr s19, [sp, #64]$/;"	l
+ldr	output.s	/^ldr s20, [sp, #160]$/;"	l
+ldr	output.s	/^ldr s20, [sp, #72]$/;"	l
+ldr	output.s	/^ldr s21, [sp, #164]$/;"	l
+ldr	output.s	/^ldr s21, [sp, #80]$/;"	l
+ldr	output.s	/^ldr s22, [sp, #168]$/;"	l
 ldr	output.s	/^ldr s22, [sp, #88]$/;"	l
-ldr	output.s	/^ldr s23, [sp, #92]$/;"	l
-ldr	output.s	/^ldr w19, [x10, #0]$/;"	l
-ldr	output.s	/^ldr w19, [x9, #0]$/;"	l
-ldr	output.s	/^ldr w20, [x9, #0]$/;"	l
-ldr	output.s	/^ldr w20, _CONSTANT_1$/;"	l
-ldr	output.s	/^ldr w21, [x9, #0]$/;"	l
-ldr	output.s	/^ldr w21, _CONSTANT_2$/;"	l
-ldr	output.s	/^ldr w22, [x9, #0]$/;"	l
-ldr	output.s	/^ldr w23, [sp, #-4]$/;"	l
-ldr	output.s	/^ldr w23, [x9, #0]$/;"	l
-ldr	output.s	/^ldr w23, _CONSTANT_5$/;"	l
-ldr	output.s	/^ldr w24, [sp, #-4]$/;"	l
-ldr	output.s	/^ldr w24, [x10, #0]$/;"	l
-ldr	output.s	/^ldr w24, _CONSTANT_4$/;"	l
-ldr	output.s	/^ldr w24, _CONSTANT_6$/;"	l
-ldr	output.s	/^ldr x10, =_g_n$/;"	l
+ldr	output.s	/^ldr s23, [sp, #172]$/;"	l
+ldr	output.s	/^ldr s23, [sp, #96]$/;"	l
+ldr	output.s	/^ldr s24, [sp, #104]$/;"	l
+ldr	output.s	/^ldr s25, [sp, #112]$/;"	l
+ldr	output.s	/^ldr s26, [sp, #120]$/;"	l
+ldr	output.s	/^ldr s27, [sp, #128]$/;"	l
+ldr	output.s	/^ldr s28, [sp, #136]$/;"	l
+ldr	output.s	/^ldr w10, [x29, #-12]$/;"	l
+ldr	output.s	/^ldr w10, [x29, #-4]$/;"	l
+ldr	output.s	/^ldr w10, _CONSTANT_8$/;"	l
+ldr	output.s	/^ldr w11, [x29, #-4]$/;"	l
+ldr	output.s	/^ldr w12, [x29, #-12]$/;"	l
+ldr	output.s	/^ldr w12, [x29, #-8]$/;"	l
+ldr	output.s	/^ldr w19, _CONSTANT_1$/;"	l
+ldr	output.s	/^ldr w19, _CONSTANT_10$/;"	l
+ldr	output.s	/^ldr w19, _CONSTANT_11$/;"	l
+ldr	output.s	/^ldr w19, _CONSTANT_18$/;"	l
+ldr	output.s	/^ldr w19, _CONSTANT_22$/;"	l
+ldr	output.s	/^ldr w19, _CONSTANT_24$/;"	l
+ldr	output.s	/^ldr w19, _CONSTANT_28$/;"	l
+ldr	output.s	/^ldr w19, _CONSTANT_30$/;"	l
+ldr	output.s	/^ldr w19, _CONSTANT_34$/;"	l
+ldr	output.s	/^ldr w19, _CONSTANT_39$/;"	l
+ldr	output.s	/^ldr w19, _CONSTANT_5$/;"	l
+ldr	output.s	/^ldr w20, _CONSTANT_19$/;"	l
+ldr	output.s	/^ldr w20, _CONSTANT_2$/;"	l
+ldr	output.s	/^ldr w20, _CONSTANT_21$/;"	l
+ldr	output.s	/^ldr w20, _CONSTANT_25$/;"	l
+ldr	output.s	/^ldr w20, _CONSTANT_27$/;"	l
+ldr	output.s	/^ldr w20, _CONSTANT_3$/;"	l
+ldr	output.s	/^ldr w20, _CONSTANT_31$/;"	l
+ldr	output.s	/^ldr w20, _CONSTANT_33$/;"	l
+ldr	output.s	/^ldr w20, _CONSTANT_4$/;"	l
+ldr	output.s	/^ldr w9, [x29, #-12]$/;"	l
+ldr	output.s	/^ldr w9, [x29, #-8]$/;"	l
+ldr	output.s	/^ldr w9, _CONSTANT_7$/;"	l
+ldr	output.s	/^ldr w9, _CONSTANT_9$/;"	l
 ldr	output.s	/^ldr x10, [sp, #16]$/;"	l
 ldr	output.s	/^ldr x11, [sp, #24]$/;"	l
 ldr	output.s	/^ldr x12, [sp, #32]$/;"	l
 ldr	output.s	/^ldr x13, [sp, #40]$/;"	l
 ldr	output.s	/^ldr x14, [sp, #48]$/;"	l
 ldr	output.s	/^ldr x15, [sp, #56]$/;"	l
-ldr	output.s	/^ldr x21, =_CONSTANT_3$/;"	l
-ldr	output.s	/^ldr x25, =_CONSTANT_7$/;"	l
-ldr	output.s	/^ldr x26, =_CONSTANT_8$/;"	l
+ldr	output.s	/^ldr x19, =_CONSTANT_20$/;"	l
+ldr	output.s	/^ldr x19, =_CONSTANT_26$/;"	l
+ldr	output.s	/^ldr x19, =_CONSTANT_32$/;"	l
+ldr	output.s	/^ldr x20, =_CONSTANT_12$/;"	l
+ldr	output.s	/^ldr x20, =_CONSTANT_13$/;"	l
+ldr	output.s	/^ldr x20, =_CONSTANT_17$/;"	l
+ldr	output.s	/^ldr x20, =_CONSTANT_23$/;"	l
+ldr	output.s	/^ldr x20, =_CONSTANT_29$/;"	l
+ldr	output.s	/^ldr x20, =_CONSTANT_35$/;"	l
+ldr	output.s	/^ldr x20, =_CONSTANT_36$/;"	l
+ldr	output.s	/^ldr x20, =_CONSTANT_37$/;"	l
+ldr	output.s	/^ldr x20, =_CONSTANT_38$/;"	l
+ldr	output.s	/^ldr x20, =_CONSTANT_6$/;"	l
 ldr	output.s	/^ldr x29, [x29, #0]$/;"	l
 ldr	output.s	/^ldr x30, =_frameSize_MAIN$/;"	l
-ldr	output.s	/^ldr x30, =_frameSize_fact$/;"	l
 ldr	output.s	/^ldr x30, [x29, #8]$/;"	l
 ldr	output.s	/^ldr x30, [x30, #0]$/;"	l
-ldr	output.s	/^ldr x9, =_g_n$/;"	l
 ldr	output.s	/^ldr x9, [sp, #8]$/;"	l
 leftmostSibling	header.h	/^	struct AST_NODE *leftmostSibling;$/;"	m	struct:AST_NODE	typeref:struct:AST_NODE::AST_NODE
 lexeme	parser.tab.c	/^	char *lexeme;$/;"	m	union:YYSTYPE	file:
 lexeme	parser.tab.h	/^	char *lexeme;$/;"	m	union:YYSTYPE
 linenumber	header.h	/^	int linenumber;$/;"	m	struct:AST_NODE
 linenumber	parser.tab.c	/^int linenumber = 1;$/;"	v
+main	main.S	/^main:$/;"	l
 main	parser.tab.c	/^main (argc, argv)$/;"	f
-main	pattern/assign.c	/^int main() {$/;"	f
-main	pattern/control.c	/^int main() {$/;"	f
-main	pattern/expr.c	/^int main() {$/;"	f
 main	pattern/func.c	/^int main() {$/;"	f
 main	pattern/func.s	/^main:$/;"	l
 main	pattern/io.c	/^int main() {$/;"	f
@@ -625,13 +706,16 @@ makeIDNode	parser.tab.c	/^static inline AST_NODE* makeIDNode(char *lexeme, IDENT
 makeSibling	parser.tab.c	/^static inline AST_NODE* makeSibling(AST_NODE *a, AST_NODE *b)$/;"	f	file:
 makeStmtNode	parser.tab.c	/^static inline AST_NODE* makeStmtNode(STMT_KIND stmtKind)$/;"	f	file:
 mcexpr	parser.y	/^mcexpr		: mcexpr OP_TIMES cfactor$/;"	l
-mov	output.s	/^mov w0, w0$/;"	l
-mov	output.s	/^mov w0, w20$/;"	l
-mov	output.s	/^mov w19, w0$/;"	l
-mov	output.s	/^mov x0, x21$/;"	l
-mov	output.s	/^mov x0, x25$/;"	l
-mov	output.s	/^mov x0, x26$/;"	l
-mul	output.s	/^mul w0, w21, w0$/;"	l
+mov	output.s	/^mov w0, w10$/;"	l
+mov	output.s	/^mov w0, w19$/;"	l
+mov	output.s	/^mov w0, w9$/;"	l
+mov	output.s	/^mov w10, w9$/;"	l
+mov	output.s	/^mov w9, w10$/;"	l
+mov	output.s	/^mov x0, x19$/;"	l
+mov	output.s	/^mov x0, x20$/;"	l
+mul	output.s	/^mul w0, w0, w20$/;"	l
+mul	output.s	/^mul w0, w11, w12$/;"	l
+mul	output.s	/^mul w0, w12, w19$/;"	l
 mul_op	parser.y	/^mul_op		: OP_TIMES$/;"	l
 n	pattern/temp.c	/^int n;$/;"	v
 name	symbolTable.h	/^    char* name;$/;"	m	struct:SymbolTableEntry
@@ -680,8 +764,9 @@ program	parser.y	/^program		: global_decl_list { $$=Allocate(PROGRAM_NODE);  mak
 properties	symbolTable.h	/^    } properties;$/;"	m	struct:TypeDescriptor	typeref:union:TypeDescriptor::__anon5
 recycle	codegen.c	/^void recycle(AST_NODE* node) {$/;"	f
 reg_number	codegen.c	/^int reg_number;$/;"	v
-reg_stack_callee	codegen.c	/^int reg_stack_callee[11];$/;"	v
+reg_stack_callee	codegen.c	/^int reg_stack_callee[10];$/;"	v
 reg_stack_caller	codegen.c	/^int reg_stack_caller[7];$/;"	v
+reg_stack_float	codegen.c	/^int reg_stack_float[8];$/;"	v
 rel_op	parser.y	/^rel_op		: OP_EQ$/;"	l
 relop_expr	parser.y	/^relop_expr	: relop_term$/;"	l
 relop_expr_list	parser.y	/^relop_expr_list	: nonempty_relop_expr_list$/;"	l
@@ -696,6 +781,7 @@ sameNameInOuterLevel	symbolTable.h	/^    struct SymbolTableEntry* sameNameInOute
 sc	header.h	/^		char    *sc; }$/;"	m	union:CON_Type::__anon3
 scopeDisplay	symbolTable.h	/^    SymbolTableEntry** scopeDisplay;$/;"	m	struct:SymbolTable
 scopeDisplayElementCount	symbolTable.h	/^    int scopeDisplayElementCount;$/;"	m	struct:SymbolTable
+sdiv	output.s	/^sdiv w0, w20, w19$/;"	l
 semanticAnalysis	semanticAnalysis.c	/^void semanticAnalysis(AST_NODE *root)$/;"	f
 semantic_value	header.h	/^	} semantic_value;$/;"	m	struct:AST_NODE	typeref:union:AST_NODE::__anon4
 short	parser.tab.c	275;"	d	file:
@@ -703,30 +789,44 @@ sizeInEachDimension	symbolTable.h	/^    int sizeInEachDimension[MAX_ARRAY_DIMENS
 stmt	parser.y	/^stmt		: MK_LBRACE block MK_RBRACE$/;"	l
 stmtSemanticValue	header.h	/^        STMTSemanticValue stmtSemanticValue;$/;"	m	union:AST_NODE::__anon4
 stmt_list	parser.y	/^stmt_list	: stmt_list stmt$/;"	l
-str	output.s	/^str s16, [sp, #64]$/;"	l
-str	output.s	/^str s17, [sp, #68]$/;"	l
-str	output.s	/^str s18, [sp, #72]$/;"	l
-str	output.s	/^str s19, [sp, #76]$/;"	l
-str	output.s	/^str s20, [sp, #80]$/;"	l
-str	output.s	/^str s21, [sp, #84]$/;"	l
-str	output.s	/^str s22, [sp, #88]$/;"	l
-str	output.s	/^str s23, [sp, #92]$/;"	l
-str	output.s	/^str w19, [x9, #0]$/;"	l
-str	output.s	/^str w20, [x9, #0]$/;"	l
-str	output.s	/^str w22, [x9, #0]$/;"	l
-str	output.s	/^str w23, [sp, #-4]$/;"	l
-str	output.s	/^str w24, [sp, #-4]$/;"	l
+str	output.s	/^str s16, [sp, #144]$/;"	l
+str	output.s	/^str s16, [x29, #-20]$/;"	l
+str	output.s	/^str s16, [x29, #-24]$/;"	l
+str	output.s	/^str s17, [sp, #148]$/;"	l
+str	output.s	/^str s17, [x29, #-16]$/;"	l
+str	output.s	/^str s17, [x29, #-24]$/;"	l
+str	output.s	/^str s18, [sp, #152]$/;"	l
+str	output.s	/^str s19, [sp, #156]$/;"	l
+str	output.s	/^str s20, [sp, #160]$/;"	l
+str	output.s	/^str s21, [sp, #164]$/;"	l
+str	output.s	/^str s22, [sp, #168]$/;"	l
+str	output.s	/^str s23, [sp, #172]$/;"	l
+str	output.s	/^str w10, [x29, #-12]$/;"	l
+str	output.s	/^str w10, [x29, #-4]$/;"	l
+str	output.s	/^str w9, [x29, #-12]$/;"	l
+str	output.s	/^str w9, [x29, #-8]$/;"	l
 str	output.s	/^str x10, [sp, #16]$/;"	l
 str	output.s	/^str x11, [sp, #24]$/;"	l
 str	output.s	/^str x12, [sp, #32]$/;"	l
 str	output.s	/^str x13, [sp, #40]$/;"	l
 str	output.s	/^str x14, [sp, #48]$/;"	l
 str	output.s	/^str x15, [sp, #56]$/;"	l
+str	output.s	/^str x19, [sp, #64]$/;"	l
+str	output.s	/^str x20, [sp, #72]$/;"	l
+str	output.s	/^str x21, [sp, #80]$/;"	l
+str	output.s	/^str x22, [sp, #88]$/;"	l
+str	output.s	/^str x23, [sp, #96]$/;"	l
+str	output.s	/^str x24, [sp, #104]$/;"	l
+str	output.s	/^str x25, [sp, #112]$/;"	l
+str	output.s	/^str x26, [sp, #120]$/;"	l
+str	output.s	/^str x27, [sp, #128]$/;"	l
+str	output.s	/^str x28, [sp, #136]$/;"	l
 str	output.s	/^str x29, [sp, #-8]$/;"	l
 str	output.s	/^str x30, [sp, #0]$/;"	l
 str	output.s	/^str x9, [sp, #8]$/;"	l
 sub	output.s	/^sub sp, sp, w30$/;"	l
-sub	output.s	/^sub w20, w19, w21$/;"	l
+sub	output.s	/^sub w0, w0, w0$/;"	l
+sub	output.s	/^sub w10, w0, w19$/;"	l
 symbolTable	symbolTable.c	/^SymbolTable symbolTable;$/;"	v
 symbolTableEnd	symbolTable.c	/^void symbolTableEnd()$/;"	f
 symbolTableEntry	header.h	/^    struct SymbolTableEntry *symbolTableEntry;$/;"	m	struct:IdentifierSemanticValue	typeref:struct:IdentifierSemanticValue::SymbolTableEntry
