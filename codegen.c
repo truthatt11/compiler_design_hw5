@@ -60,7 +60,7 @@ void codegen(AST_NODE* programNode) {
     callee_top = 10;
     for(i=0; i<7; i++) reg_stack_caller[i] = 15-i;
     caller_top = 7;
-    for(i=0; i<8; i++) reg_stack_float[i] = 23-i;
+    for(i=0; i<8; i++) reg_stack_float[i] = 55-i;
     float_top = 8;
 
     while(traverseDeclaration) {
@@ -395,22 +395,37 @@ void genAssignmentStmt(AST_NODE* assignmentNode)
 
     genVariableValue(leftOp);
 //    rightOp->place = leftOp->place;
-    if(rightOp->place == 0) rightOp->place = get_reg(CALLER);
+    if(rightOp->place == 0) {
+        if(leftOp->dataType == INT_TYPE) rightOp->place = get_reg(CALLER);
+        if(leftOp->dataType == FLOAT_TYPE) rightOp->place = get_reg(FLOAT);
+    }
     genExprRelatedNode(rightOp);
 
     if(entry->nestingLevel > 0) {
-        if(leftOp->place != rightOp->place)
-            fprintf(fout, "mov w%d, w%d\n", leftOp->place, rightOp->place);
-        fprintf(fout, "str w%d, [x29, #%d]\n", leftOp->place, entry->offset);
+        if(entry->attribute->attr.typeDescriptor->kind == SCALAR_TYPE_DESCRIPTOR) {
+            if(leftOp->place != rightOp->place) {
+                if(leftOp->dataType == INT_TYPE) fprintf(fout, "mov w%d, w%d\n", leftOp->place, rightOp->place);
+                if(leftOp->dataType == FLOAT_TYPE) fprintf(fout, "fmov s%d, s%d\n", leftOp->place-32, rightOp->place-32);
+            }
+            if(leftOp->dataType == INT_TYPE) fprintf(fout, "str w%d, [x29, #%d]\n", leftOp->place, entry->offset);
+            if(leftOp->dataType == FLOAT_TYPE) fprintf(fout, "str s%d, [x29, #%d]\n", leftOp->place-32, entry->offset);
+        }else {
+            if(leftOp->dataType == INT_TYPE) fprintf(fout, "str w%d, [x%d, #0]\n", rightOp->place, leftOp->place);
+            if(leftOp->dataType == FLOAT_TYPE) fprintf(fout, "str s%d, [x%d, #0]\n", rightOp->place-32, leftOp->place);
+        }
     }else if(entry->attribute->attr.typeDescriptor->kind == SCALAR_TYPE_DESCRIPTOR) {
         int temp = get_reg(CALLER);
-        if(leftOp->place != rightOp->place)
-            fprintf(fout, "mov w%d, w%d\n", leftOp->place, rightOp->place);
+        if(leftOp->place != rightOp->place) {
+            if(leftOp->dataType == INT_TYPE) fprintf(fout, "mov w%d, w%d\n", leftOp->place, rightOp->place);
+            if(leftOp->dataType == FLOAT_TYPE) fprintf(fout, "fmov s%d, s%d\n", leftOp->place-32, rightOp->place-32);
+        }
         fprintf(fout, "ldr x%d, =_g_%s\n", temp, entry->name);
-        fprintf(fout, "str w%d, [x%d, #0]\n", leftOp->place, temp);
+        if(leftOp->dataType == INT_TYPE) fprintf(fout, "str w%d, [x%d, #0]\n", leftOp->place, temp);
+        if(leftOp->dataType == FLOAT_TYPE) fprintf(fout, "str s%d, [x%d, #0]\n", leftOp->place-32, temp);
         reg_stack_caller[caller_top++] = temp;
     }else {
-        fprintf(fout, "str w%d, [x%d, #0]\n", rightOp->place, leftOp->place);
+        if(leftOp->dataType == INT_TYPE) fprintf(fout, "str w%d, [x%d, #0]\n", rightOp->place, leftOp->place);
+        if(leftOp->dataType == FLOAT_TYPE) fprintf(fout, "str s%d, [x%d, #0]\n", rightOp->place-32, leftOp->place);
     }
     recycle(leftOp);
     recycle(rightOp);
@@ -424,14 +439,19 @@ void genVariableValue(AST_NODE* idNode)
     if(idNode->semantic_value.identifierSemanticValue.kind == NORMAL_ID)
     {
         /* global and local */
-        if(idNode->place == 0) idNode->place = get_reg(CALLER);
+        if(idNode->place == 0) {
+            if(idNode->dataType == INT_TYPE) idNode->place = get_reg(CALLER);
+            if(idNode->dataType == FLOAT_TYPE) idNode->place = get_reg(FLOAT);
+        }
 
         if(entry->nestingLevel != 0) {
-            fprintf(fout, "ldr w%d, [x29, #%d]\n", idNode->place, entry->offset);
+            if(idNode->dataType == INT_TYPE) fprintf(fout, "ldr w%d, [x29, #%d]\n", idNode->place, entry->offset);
+            if(idNode->dataType == FLOAT_TYPE) fprintf(fout, "ldr s%d, [x29, #%d]\n", idNode->place-32, entry->offset);
         } else {
             int temp = get_reg(CALLER);
             fprintf(fout, "ldr x%d, =_g_%s\n", temp, idNode->semantic_value.identifierSemanticValue.identifierName);
-            fprintf(fout, "ldr w%d, [x%d, #0]\n", idNode->place, temp);
+            if(idNode->dataType == INT_TYPE) fprintf(fout, "ldr w%d, [x%d, #0]\n", idNode->place, temp);
+            if(idNode->dataType == FLOAT_TYPE) fprintf(fout, "ldr s%d, [x%d, #0]\n", idNode->place-32, temp);
             reg_stack_caller[caller_top++] = temp;
         }
     }
@@ -441,19 +461,21 @@ void genVariableValue(AST_NODE* idNode)
         AST_NODE *traverseDimList = idNode->child;
 
         genExprRelatedNode(traverseDimList);
-        if(idNode->place == 0) {
-            int temp = get_reg(CALLER);
-            idNode->place = get_reg(CALLEE);
-            if(entry->nestingLevel == 0)
-                fprintf(fout, "ldr x%d, =_g_%s\n", idNode->place, idNode->semantic_value.identifierSemanticValue.identifierName);
-            else {
-                fprintf(fout, "ldr x%d, [x29, #%d]\n", idNode->place, entry->offset);
-            }
+        if(idNode->place == 0) idNode->place = get_reg(CALLEE);
+        
+        int temp = get_reg(CALLER);
+        if(entry->nestingLevel == 0)
+//            if(idNode->dataType == INT_TYPE)
+            fprintf(fout, "ldr x%d, =_g_%s\n", idNode->place, entry->name);
+//            if(idNode->dataType == FLOAT_TYPE) fprintf(fout, "ldr s%d, =_g_%s\n", idNode->place-32, entry->name);
+        else {
+            fprintf(fout, "add x%d, x29, #%d\n", idNode->place, entry->offset);
             fprintf(fout, "ldr w%d, =4\n", temp);
             fprintf(fout, "mul w%d, w%d, w%d\n", traverseDimList->place, traverseDimList->place, temp);
             fprintf(fout, "add x%d, x%d, w%d, UXTW\n", idNode->place, idNode->place, traverseDimList->place);
-            reg_stack_caller[caller_top++] = temp;
         }
+        reg_stack_caller[caller_top++] = temp;
+
         recycle(traverseDimList);
     }
 }
@@ -539,10 +561,11 @@ void genWriteFunction(AST_NODE* functionCallNode)
         case FLOAT_TYPE:
             //fprintf(fout, "ldr w9, [x29, #%d]\n", entry->offset);
             if(actualParameter != NULL) {
-                if(actualParameter->place == 0) actualParameter->place = get_reg(CALLER);
+//                if(actualParameter->place == 0) actualParameter->place = get_reg(FLOAT);
                 genExprRelatedNode(actualParameter);
             }
-            fprintf(fout, "mov w0, w%d\n", actualParameter->place);
+            if(actualParameter->place > 32) fprintf(fout, "fmov s0, s%d\n", actualParameter->place-32);
+            else fprintf(fout, "ldr s0, [x%d, #0]\n", actualParameter->place);
             fprintf(fout, "bl _write_float\n");
             break;
         case CONST_STRING_TYPE:
@@ -586,7 +609,10 @@ void genConstValueNode(AST_NODE* constValueNode)
 {
     char* constString = malloc(1024);
     constant_count++;
-    if(constValueNode->place == 0) constValueNode->place = get_reg(CALLEE);
+    if(constValueNode->place == 0) { 
+        if(constValueNode->semantic_value.const1->const_type == FLOATC) constValueNode->place = get_reg(FLOAT);
+        else constValueNode->place = get_reg(CALLEE);
+    }
 
     switch(constValueNode->semantic_value.const1->const_type)
     {
@@ -604,7 +630,7 @@ void genConstValueNode(AST_NODE* constValueNode)
                     , constValueNode->semantic_value.const1->const_u.fval);
             fprintf(fout, ".align 3\n");
             fprintf(fout, ".text\n");
-            fprintf(fout, "ldr w%d, _CONSTANT_%d\n", constValueNode->place, constant_count);
+            fprintf(fout, "ldr s%d, _CONSTANT_%d\n", constValueNode->place-32, constant_count);
             break;
         case STRINGC:
             strncpy(constString, constValueNode->semantic_value.const1->const_u.sc+1,
@@ -693,8 +719,8 @@ void recycle(AST_NODE* node) {
         reg_stack_caller[caller_top++] = node->place;
     else if(node->place >= 19 && node->place <= 28)
         reg_stack_callee[callee_top++] = node->place;
-    else if(node->place >= 48 && node->place <= 55)
-        reg_stack_float[float_top++] = node->place-32;
+    else if(node->place >= 48 && node->place <= 55) // 16+32 ~ 23+32
+        reg_stack_float[float_top++] = node->place;
     
     node->place = 0;
 }
