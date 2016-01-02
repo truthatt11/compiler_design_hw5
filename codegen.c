@@ -341,7 +341,7 @@ void genExprNode(AST_NODE* exprNode) {
                     fprintf(fout, "and w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
                     break;
                 case BINARY_OP_OR:
-                    fprintf(fout, "or w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
+                    fprintf(fout, "orr w%d, w%d, w%d\n", exprNode->place, leftOp->place, rightOp->place);
                     break;
                 default:
                     break;
@@ -470,10 +470,10 @@ void genVariableValue(AST_NODE* idNode)
 //            if(idNode->dataType == FLOAT_TYPE) fprintf(fout, "ldr s%d, =_g_%s\n", idNode->place-32, entry->name);
         else {
             fprintf(fout, "add x%d, x29, #%d\n", idNode->place, entry->offset);
-            fprintf(fout, "ldr w%d, =4\n", temp);
-            fprintf(fout, "mul w%d, w%d, w%d\n", traverseDimList->place, traverseDimList->place, temp);
-            fprintf(fout, "add x%d, x%d, w%d, UXTW\n", idNode->place, idNode->place, traverseDimList->place);
         }
+        fprintf(fout, "ldr w%d, =4\n", temp);
+        fprintf(fout, "mul w%d, w%d, w%d\n", traverseDimList->place, traverseDimList->place, temp);
+        fprintf(fout, "add x%d, x%d, w%d, UXTW\n", idNode->place, idNode->place, traverseDimList->place);
         reg_stack_caller[caller_top++] = temp;
 
         recycle(traverseDimList);
@@ -555,7 +555,10 @@ void genWriteFunction(AST_NODE* functionCallNode)
                 if(actualParameter->place == 0) actualParameter->place = get_reg(CALLER);
                 genExprRelatedNode(actualParameter);
             }
-            fprintf(fout, "mov w0, w%d\n", actualParameter->place);
+            // scalar
+            if(actualParameter->semantic_value.identifierSemanticValue.kind == NORMAL_ID)
+                fprintf(fout, "mov w0, w%d\n", actualParameter->place); //scalar
+            else fprintf(fout, "ldr w0, [x%d, #0]\n", actualParameter->place); //array
             fprintf(fout, "bl _write_int\n");
             break;
         case FLOAT_TYPE:
